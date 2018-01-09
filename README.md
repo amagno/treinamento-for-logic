@@ -1,3 +1,3 @@
 # Treinamento ForLogic
 
- - atividade - 1 HTML/CSS - 09/01/2018
+ - [Atividade 1 HTML/CSS](https://github.com/amagno/treinamento-for-logic/tree/master/atividade-1)
