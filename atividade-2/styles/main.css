@@ -1,0 +1,132 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html {
+    font-family: sans-serif;
+}
+body {
+    font-size: 14px;
+    background-color: #f9f9f9;
+    color: #333;
+    padding-top: 90px;
+}
+  
+
+/*NAV*/
+header {
+    width: 100%;
+    background-color: #f8f8f8;
+    border-color: #e7e7e7;
+    position: fixed;
+    top: 0;
+    z-index: 1100;
+    border-width: 0 0 1px;
+}
+.nav-container {
+    width: 1170px;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.nav-logo {
+    float: left;
+}
+.nav-logo img {
+    margin-top: 22px;
+}
+.nav-links ul {
+    float: right;
+    list-style: none;
+
+}
+.nav-links ul li {
+    float: left;
+}
+.nav-links ul li a {
+    margin-top: 1px;
+    line-height: 90px;
+    height: 90px;
+    padding: 0 8px;
+    font-family: 'Helvetica Neue Bold',Helvetica;
+    color: #777;
+    font-style: normal;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+.nav-banner {
+    float: right;
+}
+.nav-banner img {
+    height: 91px;
+}
+/*CONTENT*/
+
+.main-container {
+    clear: both;
+}
+.main-content-container {
+    background-color: #f9f9f9;
+    padding-left: 4%;
+    padding-right: 4%;
+    display: flex;
+}
+.main-content {
+    width: 1180px;
+    margin: 0 auto;
+}
+/*MAIN HEADER*/
+.main-header {
+    background-image: url('../assets/imagem-top.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    padding-bottom: 150px;
+    padding-top: 150px;
+}
+.main-header-text {
+    width: 1180px;
+    margin: 0 auto;
+    text-align: center;
+}
+/*FORM*/
+.main-form {
+    display: flex;
+    float: left;
+    width: 75%;
+    flex-wrap: wrap;
+}
+.form-input {
+    width: 45%;
+    display: inline-block;
+    padding: 0 10px;
+    margin-top: 10px;
+}
+
+.form-input.button {
+    display: block;
+}
+.form-input.full {
+    width: 93%;
+}
+.form-input input {
+    width: 100%;
+}
+.form-input textarea {
+    width: 100%;
+}
+.form-input label {
+    display: block;
+}
+
+/*FOOTER*/
+footer {
+    clear: both;
+}
+.footer-content {
+    background-color: #1a1a1a;
+    padding-bottom: 40px;
+    padding-top: 40px;
+}
