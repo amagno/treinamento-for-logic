@@ -21,7 +21,6 @@ header {
     border-color: #e7e7e7;
     position: fixed;
     top: 0;
-    z-index: 1100;
     border-width: 0 0 1px;
 }
 .nav-container {
@@ -32,20 +31,9 @@ header {
     margin-left: auto;
 }
 .nav-logo {
-    float: left;
-}
-.nav-logo img {
-    margin-top: 22px;
-}
-.nav-links ul {
-    float: right;
-    list-style: none;
-
-}
-.nav-links ul li {
-    float: left;
-}
-.nav-links ul li a {
+    float: left;    
+    display: block;
+    margin-left: -15px;
     margin-top: 1px;
     line-height: 90px;
     height: 90px;
@@ -53,11 +41,36 @@ header {
     font-family: 'Helvetica Neue Bold',Helvetica;
     color: #777;
     font-style: normal;
+    text-transform: uppercase;   
+}
+.nav-logo img {
+    margin-top: 22px;
+}
+.nav-links {
+    float: right;
+    list-style: none;
+    margin-right: 5px;
+}
+.nav-links li {
+    float: left;
+    display: block;
+}
+.nav-links li a {
+    margin-top: 1px;
+    line-height: 90px;
+    height: 90px;
+    padding: 0 8px;
+    font-family: 'Helvetica Neue Bold';
+    color: #777;
+    display: block;
+    font-style: normal;
     text-transform: uppercase;
     text-decoration: none;
 }
 .nav-banner {
     float: right;
+    height: 91px;
+    margin-right: 5px;
 }
 .nav-banner img {
     height: 91px;
@@ -72,10 +85,14 @@ header {
     padding-left: 4%;
     padding-right: 4%;
     display: flex;
+    padding-bottom: 80px;
+    padding-top: 80px;
 }
 .main-content {
     width: 1180px;
     margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
 }
 /*MAIN HEADER*/
 .main-header {
@@ -91,36 +108,126 @@ header {
     margin: 0 auto;
     text-align: center;
 }
-/*FORM*/
+/* MAIN FORM */
 .main-form {
     display: flex;
     float: left;
     width: 75%;
     flex-wrap: wrap;
 }
+.main-form h1 {
+    color: #14c5fe;
+    font-size: 50px;
+    font-weight: 500;
+    font-family: "Helvetica Neue Light";
+    font-style: normal;
+    /* letter-spacing: 0px;
+    line-height: 35px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 50px;
+    padding-right: 50px;
+    text-align: left; */
+}
 .form-input {
-    width: 45%;
+    width: 46%;
     display: inline-block;
     padding: 0 10px;
     margin-top: 10px;
 }
-
 .form-input.button {
     display: block;
 }
 .form-input.full {
-    width: 93%;
+    width: 92%;
 }
 .form-input input {
     width: 100%;
+    display: block;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 15px;
+    color: #555;
+    font-family: Proxima Nova;
+    background-image: none;
+    border: 1px solid #ccc;
+    
 }
 .form-input textarea {
     width: 100%;
 }
 .form-input label {
     display: block;
+    font-family: Proxima Nova;
+    font-size: 15px;
+    color: #999;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+/* MAIN LINKS */
+.main-links {
+    width: 25%;
+}
+/* SOCIAL LINKS */
+.social-links h4 {
+    font-family: Helvetica Neue Thin;
+    font-size: 35px;
+    color: #666;
+    margin-top: 35px;
+    padding-bottom: 45px;
+    font-weight: 500;
+    width: 100%;   
+}
+.social-links a.fb-ico {
+    background-image: url('../assets/ico-Facebook.png');
+}
+.social-links a.tw-ico {
+    background-image: url('../assets/ico-Twitter.png');
+}
+.social-links a.go-ico {
+    background-image: url('../assets/ico-g.png');
+}
+.social-links a.lk-ico {
+    background-image: url('../assets/ico-Linkedin.png');
+}
+.social-links a {
+    width: 50px;
+    height: 50px;
+    float: left;
+    background-repeat: no-repeat;
+    margin-top: -40px;
+    cursor: pointer;
 }
 
+/* TRABALHE CONOSCO */
+.trabalhe-conosco {
+    border: 1px solid gray;
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+    margin-top: 70px;
+}
+.trabalhe-conosco img {
+    width: 30%;
+    margin: 5%;
+}
+.trabalhe-conosco h3 {
+    width: 60%;
+    margin-top: 20px;
+    color: #d6d6d6;
+    font-family: Helvetica Neue Thin;
+    font-size: 35px;
+}
+.trabalhe-conosco a {
+    background-color: #fdc00f;
+    padding: 15px 20px;
+    color: #fff;
+    font-size: 15px;
+    font-family: Proxima Nova;
+    width: 90%;
+    margin-left: 5%;
+    margin-bottom: 5%;
+}
 /*FOOTER*/
 footer {
     clear: both;
