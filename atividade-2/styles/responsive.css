@@ -1,0 +1,34 @@
+@media screen and (max-width: 1170px) {
+    .nav-links {
+        display: none;
+    }
+    .nav-banner {
+        display: none;
+    }
+    .main-header-text {
+        width: 360px;
+    }
+    .main-links {
+        width: 100%;
+        text-align: center;
+        margin: 0 auto;
+    }
+    .footer-content {
+        width: 360px;
+        text-align: center;
+    }
+    .main-form {
+        width: 100%;
+    }
+    .form-input {
+        width: 93%;
+    }
+    .footer-info {
+        width: 100%;
+    }
+    .social-links-images {
+        width: 200px;
+        margin: 0 auto;
+        display: flex;
+    }
+}
