@@ -10,3 +10,7 @@
     font-family: 'Helvetica Neue Light';
     src: url('fonts/HelveticaNeueLTStd-LtCn.woff') format('woff');
 }
+@font-face {
+    font-family: 'Proxima Nova';
+    src: url('fonts/ProximaNova-Regular.woff') format('woff');
+}
