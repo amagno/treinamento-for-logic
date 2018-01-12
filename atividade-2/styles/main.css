@@ -321,6 +321,7 @@ footer {
 }
 .footer-images a {
     margin-right: 10px;
+    display: inline-block;
 }
 .footer-stripe {
     background-color: black;
