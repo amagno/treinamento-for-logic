@@ -7,7 +7,7 @@ footer {
     width: 100%;
 }
 .footer-content {
-    width: 1180px;
+    /* width: 1180px; */
     margin: 0 auto;
     display: flex;
     padding-bottom: 25px;
@@ -33,9 +33,13 @@ footer {
     text-align: left;
     margin-bottom: 25px;
 }
+.footer-images {
+    text-align: center;
+}
 .footer-images a {
     margin-right: 10px;
     display: inline-block;
+    margin-top: 10px;
 }
 .footer-stripe {
     background-color: black;
