@@ -47,15 +47,18 @@
       <button class="key operation">*</button>
       <button class="key number">0</button>
       <button class="key operation">=</button>
-      <button class="key operation">AC</button>
+      <button class="key operation" onclick="clearDisplay()">AC</button>
       <button class="key operation">/</button>
     </div>
   </div>
   <script>
+    const primaryDisplay = document.getElementById('primary');
+    function clearDisplay() {
+      primaryDisplay.innerHTML = '';
+    }
     window.addEventListener('keyup', (event) => {
       console.log(event.keyCode);
     });
-    const primaryDisplay = document.getElementById('primary');
     const elList = Array.from(document.querySelectorAll('.key.number'));
     elList.forEach(n => n.addEventListener('click', (event) => {
       primaryDisplay.innerHTML = primaryDisplay.innerText + event.target.innerText;
