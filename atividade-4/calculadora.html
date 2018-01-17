@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    .calc-container {
+      width: 220px;
+      margin: 100px auto;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .calc-display {
+      
+    }
+    .key {
+      margin: 2px 0;
+      padding: 5px;
+      width: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <div class="calc-display">
+      <div id="secondary">secondary</div>
+      <div id="primary"></div>
+    </div>
+    <div class="calc-keys">
+      <button class="key number">7</button>
+      <button class="key number">8</button>
+      <button class="key number">9</button>
+      <button class="key operation">+</button>
+      <button class="key number">6</button>
+      <button class="key number">5</button>
+      <button class="key number">4</button>
+      <button class="key operation">-</button>
+      <button class="key number">3</button>
+      <button class="key number">2</button>
+      <button class="key number">1</button>
+      <button class="key operation">*</button>
+      <button class="key number">0</button>
+      <button class="key operation">=</button>
+      <button class="key operation">AC</button>
+      <button class="key operation">/</button>
+    </div>
+  </div>
+  <script>
+    window.addEventListener('keyup', (event) => {
+      console.log(event.keyCode);
+    });
+    const primaryDisplay = document.getElementById('primary');
+    const elList = Array.from(document.querySelectorAll('.key.number'));
+    elList.forEach(n => n.addEventListener('click', (event) => {
+      primaryDisplay.innerHTML = primaryDisplay.innerText + event.target.innerText;
+    }));
+  </script>
+</body>
+</html>
