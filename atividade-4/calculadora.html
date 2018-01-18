@@ -4,11 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+  <title>Calculadora</title>
   <style>
     * {
       margin: 0;
       padding: 0;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
     }
     .calc-container {
       width: 220px;
@@ -17,51 +21,146 @@
       flex-wrap: wrap;
     }
     .calc-display {
-      
+      width: 100%;
     }
     .key {
       margin: 2px 0;
       padding: 5px;
       width: 50px;
     }
+    .display {
+      border: 1px solid gray;
+    }
+    #secondary {
+      height: 15px;
+      font-size: 12px;
+      line-height: 15px;
+    }
+    #primary {
+      height: 25px;
+      line-height: 25px;
+    }
   </style>
 </head>
 <body>
   <div class="calc-container">
     <div class="calc-display">
-      <div id="secondary">secondary</div>
-      <div id="primary"></div>
+      <div id="secondary" class="display"></div>
+      <div id="primary" class="display"></div>
     </div>
     <div class="calc-keys">
       <button class="key number">7</button>
       <button class="key number">8</button>
       <button class="key number">9</button>
-      <button class="key operation">+</button>
+      <button class="key operation" onclick="makeOperation('+', operations.sum)">+</button>
       <button class="key number">6</button>
       <button class="key number">5</button>
       <button class="key number">4</button>
-      <button class="key operation">-</button>
+      <button class="key operation" onclick="makeOperation('-', operations.minus)">-</button>
       <button class="key number">3</button>
       <button class="key number">2</button>
       <button class="key number">1</button>
-      <button class="key operation">*</button>
+      <button class="key operation" onclick="makeOperation('*', operations.multiply)">*</button>
       <button class="key number">0</button>
-      <button class="key operation">=</button>
+      <button class="key operation" onclick="equals()">=</button>
       <button class="key operation" onclick="clearDisplay()">AC</button>
-      <button class="key operation">/</button>
+      <button class="key operation" onclick="makeOperation('/', operations.division)">/</button>
     </div>
   </div>
   <script>
     const primaryDisplay = document.getElementById('primary');
+    const secondaryDisplay = document.getElementById('secondary');
+    const keyList = Array.from(document.querySelectorAll('.key.number'));
+    // Operations
+    const operations = {
+      sum: (a,b) => a + b,
+      minus: (a,b) => a - b,
+      multiply: (a,b) => a * b,
+      division: (a,b) => a / b
+    };
+    // Key press flag
+    let flag;
+    // Cache value operation
+    let cachePrimaryValue;
+    let cacheSecondaryValue;
+    // Cache operation function
+    let cacheOperation;
+    
+
+    function makeOperation(signal, operation) {
+      // debugger;
+      const primaryValue = primaryDisplay.innerText;
+      const secondaryValue = secondaryDisplay.innerText;
+
+      console.table({
+        primary: [cachePrimaryValue, typeof cachePrimaryValue],
+        secondary: [cacheSecondaryValue, typeof cacheSecondaryValue],
+      });
+
+      if (cacheOperation !== operation && secondaryValue) {
+        console.log('operation change');
+        const sub = secondaryValue.substr(0, (secondaryValue.length - 2));;
+        secondaryDisplay.innerHTML = `${sub} ${signal}`;
+        cacheOperation = operation;
+        cacheSecondaryValue = undefined;
+        return;
+      }
+      if (!secondaryValue && primaryValue) {
+        console.log('primary value')
+        secondaryDisplay.innerHTML = `${primaryValue} ${signal}`;
+        cachePrimaryValue = primaryValue;
+        cacheOperation = operation;
+        // flag = false;
+        cacheSecondaryValue = undefined;
+        return;
+      }
+
+      if (cacheSecondaryValue && secondaryValue) {
+        console.log('flag secondary value')
+        secondaryDisplay.innerHTML = `${secondaryValue} ${primaryValue} ${signal}`;
+        const result = operation(parseInt(cachePrimaryValue), parseInt(primaryValue));
+        primaryDisplay.innerHTML = result;
+        cachePrimaryValue = result;
+        cacheSecondaryValue = undefined;
+        cacheOperation = operation;
+        // flag = false;
+        return;
+      }
+
+    }
+    // Equals function
+    function equals() {
+      // console.log('equals', cachePrimaryValue, cacheSecondaryValue, cacheOperation);
+      console.table({
+        primary: [cachePrimaryValue, typeof cachePrimaryValue],
+        secondary: [cacheSecondaryValue, typeof cacheSecondaryValue],
+      });
+      if (typeof cacheOperation === 'function' && cacheSecondaryValue) {
+        const result = cacheOperation(parseInt(cachePrimaryValue), parseInt(cacheSecondaryValue));
+        cachePrimaryValue = result;
+        secondaryDisplay.innerHTML = '';
+        primaryDisplay.innerHTML = result;
+ 
+      }
+    }
+    // Clear display
     function clearDisplay() {
+      cacheOperation = undefined;
+      cachePrimaryValue = undefined;
+      cacheSecondaryValue = undefined;
+      flag = undefined;
+      secondaryDisplay.innerHTML =  '';
       primaryDisplay.innerHTML = '';
     }
-    window.addEventListener('keyup', (event) => {
-      console.log(event.keyCode);
-    });
-    const elList = Array.from(document.querySelectorAll('.key.number'));
-    elList.forEach(n => n.addEventListener('click', (event) => {
-      primaryDisplay.innerHTML = primaryDisplay.innerText + event.target.innerText;
+    // Keypad
+    keyList.forEach(n => n.addEventListener('click', (event) => {
+      if (!cacheSecondaryValue) {
+        cacheSecondaryValue = event.target.innerText;
+        primaryDisplay.innerHTML = cacheSecondaryValue;
+        return;
+      }
+      cacheSecondaryValue = cacheSecondaryValue + event.target.innerText;
+      primaryDisplay.innerHTML = cacheSecondaryValue;
     }));
   </script>
 </body>
