@@ -45,12 +45,16 @@
     .key.operation:hover {
       background-color: #4ceb71;
     }
+    .key.pressed {
+      background-color: #4ceb71;
+    }
     .calc-display {
       width: 100%;
       background-color: #97efab;
       border-width: 1px;
       border-color: gray;
       border-style: solid;
+      text-align: right;
     }
     .display {
       padding-right: 5px;
@@ -73,7 +77,7 @@
   <div class="calc-container">
     <div class="calc-display">
       <div id="secondary" class="display"></div>
-      <div id="primary" class="display"></div>
+      <div id="primary" class="display">0</div>
     </div>
     <div class="calc-keys">
       <button class="key number"    data-key="103">7</button>
@@ -111,7 +115,9 @@
     let cacheSecondaryValue;
     // Cache operation function
     let cacheOperation;
-
+    // 
+    let equal = false;
+    // for dev
     const logCaches = (type = '') => {
       console.log('Primary: ', cachePrimaryValue);
       console.log('Secondary: ', cacheSecondaryValue);
@@ -120,8 +126,11 @@
     // make operation receive string signal and callback()
     function makeOperation(signal, operation) {
       // debugger;
+      logCaches('makeOperation')
       const primaryValue = primaryDisplay.innerText;
       const secondaryValue = secondaryDisplay.innerText;
+      //
+      if (primaryValue == 0) return;
       // Change operation
       if (cacheOperation !== operation && secondaryValue) {
         const sub = secondaryValue.substr(0, (secondaryValue.length - 2));;
@@ -148,23 +157,22 @@
         cacheOperation = operation;
         return;
       }
-
     }
     // Equals function
     function equals() {
       // if not exists keypad cache
-      logCaches('equal');
       if (!cacheSecondaryValue) {
         cacheSecondaryValue = cachePrimaryValue;
       }
-
       // Operation cache
       if (typeof cacheOperation === 'function') {
         const result = cacheOperation(parseFloat(cachePrimaryValue), parseFloat(cacheSecondaryValue));
         cachePrimaryValue = result;
         secondaryDisplay.innerHTML = '';
         primaryDisplay.innerHTML = result;
+        equal = true;
       }
+      logCaches('equal function');
     }
     // Clear display
     function clearDisplay() {
@@ -172,25 +180,34 @@
       cachePrimaryValue = undefined;
       cacheSecondaryValue = undefined;
       secondaryDisplay.innerHTML =  '';
-      primaryDisplay.innerHTML = '';
+      primaryDisplay.innerHTML = '0';
     }
     // Keypad and set secondary cache
-    keyList.forEach(n => n.addEventListener('click', (event) => {
-      // if (event.target.innerText == '0' && !cacheSecondaryValue) return;
-      logCaches();
-      if (!cacheSecondaryValue || cachePrimaryValue) {
+    keyList.forEach(n => n.addEventListener('click', (event) => {   
+      logCaches('click event');
+      // Reset primary display
+      if (!cacheSecondaryValue || equal) {
         cacheSecondaryValue = event.target.innerText;
         primaryDisplay.innerHTML = cacheSecondaryValue;
+        equal = false;
         return;
       }
       cacheSecondaryValue = cacheSecondaryValue + event.target.innerText;
       primaryDisplay.innerHTML = cacheSecondaryValue;
     }));
-    // keyup event
+    // Numeric Key event
+    window.addEventListener('keydown', (event) => {
+      const el = document.querySelector(`.key[data-key="${event.keyCode}"]`);
+      if (el) {
+        el.classList.add('pressed');
+        el.click();
+      }
+    })
+    // Remove class pressed
     window.addEventListener('keyup', (event) => {
       const el = document.querySelector(`.key[data-key="${event.keyCode}"]`);
       if (el) {
-        el.click();
+        el.classList.remove('pressed');
       }
     })
   </script>
