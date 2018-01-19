@@ -5,211 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+  <link rel="stylesheet" href="main.css">
   <title>Calculadora</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: 'Roboto', sans-serif;
-    }
-    .calc-container {
-      width: 220px;
-      margin: 100px auto;
-      display: flex;
-      flex-wrap: wrap;
-      border: 2px solid gray;
-      padding: 25px;
-      background-color: #f2f2f2;
-      border-radius: 5px;
-    }
-    .calc-keys {
-      margin-top: 10px;
-    }
-    .key {
-      margin: 2px 1px;
-      padding: 5px;
-      width: 50px;
-      border: 1px solid gray;
-      cursor: pointer;
-      font-weight: bold;
-      outline: none;
-    }
-    .key:hover {
-      background-color: #4ceb71;
-    }
-    .key.operation {
-      background-color: #b2b2b2;
-    }
-    .key.operation:hover {
-      background-color: #4ceb71;
-    }
-    .key.pressed {
-      background-color: #4ceb71;
-    }
-    .calc-display {
-      width: 100%;
-      background-color: #97efab;
-      border-width: 1px;
-      border-color: gray;
-      border-style: solid;
-      text-align: right;
-    }
-    .display {
-      padding-right: 5px;
-      padding-left: 5px;
-    }
-    #secondary {
-      font-size: 12px;
-      line-height: 20px;
-      min-height: 20px;
-    }
-    #primary {
-      min-height: 30px;
-      line-height: 30px;
-      font-size: 18px;
-      font-weight: bold;
-    }
-  </style>
 </head>
 <body>
-  <div class="calc-container">
-    <div class="calc-display">
-      <div id="secondary" class="display"></div>
-      <div id="primary" class="display">0</div>
+  <div class="container">
+    <div class="calc-container">
+      <div class="calc-display">
+        <div id="secondary" class="display"></div>
+        <div id="primary" class="display">0</div>
+      </div>
+      <div class="calc-keys">
+        <button class="key number" data-key="103">7</button>
+        <button class="key number" data-key="104">8</button>
+        <button class="key number" data-key="105">9</button>
+        <button class="key operation" data-key="107" onclick="makeOperation('+', operations.sum)">+</button>
+        <button class="key number" data-key="102">6</button>
+        <button class="key number" data-key="101">5</button>
+        <button class="key number" data-key="100">4</button>
+        <button class="key operation" data-key="109" onclick="makeOperation('-', operations.minus)">-</button>
+        <button class="key number" data-key="99">3</button>
+        <button class="key number" data-key="98">2</button>
+        <button class="key number" data-key="97">1</button>
+        <button class="key operation" data-key="106" onclick="makeOperation('*', operations.multiply)">*</button>
+        <button class="key operation" data-key="13" onclick="equals()">=</button>
+        <button class="key number" data-key="96">0</button>
+        <button class="key operation" data-key="8" onclick="clearDisplay()">AC</button>
+        <button class="key operation" data-key="111" onclick="makeOperation('/', operations.division)">/</button>
+      </div>
     </div>
-    <div class="calc-keys">
-      <button class="key number"    data-key="103">7</button>
-      <button class="key number"    data-key="104">8</button>
-      <button class="key number"    data-key="105">9</button>
-      <button class="key operation" data-key="107" onclick="makeOperation('+', operations.sum)">+</button>
-      <button class="key number"    data-key="102">6</button>
-      <button class="key number"    data-key="101">5</button>
-      <button class="key number"    data-key="100">4</button>
-      <button class="key operation" data-key="109" onclick="makeOperation('-', operations.minus)">-</button>
-      <button class="key number"    data-key="99">3</button>
-      <button class="key number"    data-key="98">2</button>
-      <button class="key number"    data-key="97">1</button>
-      <button class="key operation" data-key="106" onclick="makeOperation('*', operations.multiply)">*</button>
-      <button class="key operation" data-key="13" onclick="equals()">=</button>
-      <button class="key number"    data-key="96">0</button>
-      <button class="key operation" data-key="8" onclick="clearDisplay()">AC</button>
-      <button class="key operation" data-key="111" onclick="makeOperation('/', operations.division)">/</button>
-    </div>
+    <div id="operations-list"></div>
   </div>
-  <script type="text/javascript">
-    // selectors
-    const primaryDisplay = document.getElementById('primary');
-    const secondaryDisplay = document.getElementById('secondary');
-    const keyList = Array.from(document.querySelectorAll('.key.number'));
-    // Operations
-    const operations = {
-      sum: (a,b) => a + b,
-      minus: (a,b) => a - b,
-      multiply: (a,b) => a * b,
-      division: (a,b) => a / b
-    };
-    // Cache value operation
-    let cachePrimaryValue;
-    let cacheSecondaryValue;
-    // Cache operation function
-    let cacheOperation;
-    // 
-    let equal = false;
-    // for dev
-    const logCaches = (type = '') => {
-      console.log('Primary: ', cachePrimaryValue);
-      console.log('Secondary: ', cacheSecondaryValue);
-      console.log(type)
-    }
-    // make operation receive string signal and callback()
-    function makeOperation(signal, operation) {
-      // debugger;
-      logCaches('makeOperation')
-      const primaryValue = primaryDisplay.innerText;
-      const secondaryValue = secondaryDisplay.innerText;
-      //
-      if (primaryValue == 0) return;
-      // Change operation
-      if (cacheOperation !== operation && secondaryValue) {
-        const sub = secondaryValue.substr(0, (secondaryValue.length - 2));;
-        secondaryDisplay.innerHTML = `${sub} ${signal}`;
-        cacheOperation = operation;
-        cacheSecondaryValue = undefined;
-        return;
-      }
-      // First operation
-      if (!secondaryValue && primaryValue) {
-        secondaryDisplay.innerHTML = `${primaryValue} ${signal}`;
-        cachePrimaryValue = primaryValue;
-        cacheOperation = operation;
-        cacheSecondaryValue = undefined;
-        return;
-      }
-      // Operation signal result
-      if (cacheSecondaryValue && secondaryValue) {
-        secondaryDisplay.innerHTML = `${secondaryValue} ${primaryValue} ${signal}`;
-        const result = operation(parseFloat(cachePrimaryValue), parseFloat(primaryValue));
-        primaryDisplay.innerHTML = result;
-        cachePrimaryValue = result;
-        cacheSecondaryValue = undefined;
-        cacheOperation = operation;
-        return;
-      }
-    }
-    // Equals function
-    function equals() {
-      // if not exists keypad cache
-      if (!cacheSecondaryValue) {
-        cacheSecondaryValue = cachePrimaryValue;
-      }
-      // Operation cache
-      if (typeof cacheOperation === 'function') {
-        const result = cacheOperation(parseFloat(cachePrimaryValue), parseFloat(cacheSecondaryValue));
-        cachePrimaryValue = result;
-        secondaryDisplay.innerHTML = '';
-        primaryDisplay.innerHTML = result;
-        equal = true;
-      }
-      logCaches('equal function');
-    }
-    // Clear display
-    function clearDisplay() {
-      cacheOperation = undefined;
-      cachePrimaryValue = undefined;
-      cacheSecondaryValue = undefined;
-      secondaryDisplay.innerHTML =  '';
-      primaryDisplay.innerHTML = '0';
-    }
-    // Keypad and set secondary cache
-    keyList.forEach(n => n.addEventListener('click', (event) => {   
-      logCaches('click event');
-      // Reset primary display
-      if (!cacheSecondaryValue || equal) {
-        cacheSecondaryValue = event.target.innerText;
-        primaryDisplay.innerHTML = cacheSecondaryValue;
-        equal = false;
-        return;
-      }
-      cacheSecondaryValue = cacheSecondaryValue + event.target.innerText;
-      primaryDisplay.innerHTML = cacheSecondaryValue;
-    }));
-    // Numeric Key event
-    window.addEventListener('keydown', (event) => {
-      const el = document.querySelector(`.key[data-key="${event.keyCode}"]`);
-      if (el) {
-        el.classList.add('pressed');
-        el.click();
-      }
-    })
-    // Remove class pressed
-    window.addEventListener('keyup', (event) => {
-      const el = document.querySelector(`.key[data-key="${event.keyCode}"]`);
-      if (el) {
-        el.classList.remove('pressed');
-      }
-    })
-  </script>
+  <script src="main.js" type="text/javascript"></script>
 </body>
 </html>

@@ -1,0 +1,102 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+.hide {
+  display: none;
+}
+.container {
+  width: 800px;
+  margin: 100px auto;
+  display: flex;
+  justify-content: center;
+}
+.calc-container {
+  width: 220px;
+  display: flex;
+  flex-wrap: wrap;
+  border: 2px solid gray;
+  padding: 25px;
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  /* max-height: 190px; */
+}
+
+.calc-keys {
+  margin-top: 10px;
+}
+
+.key {
+  margin: 2px 1px;
+  padding: 5px;
+  width: 50px;
+  border: 1px solid gray;
+  cursor: pointer;
+  font-weight: bold;
+  outline: none;
+}
+
+.key:hover {
+  background-color: #4ceb71;
+}
+
+.key.operation {
+  background-color: #b2b2b2;
+}
+
+.key.operation:hover {
+  background-color: #4ceb71;
+}
+
+.key.pressed {
+  background-color: #4ceb71;
+}
+
+.calc-display {
+  width: 100%;
+  background-color: #97efab;
+  border-width: 1px;
+  border-color: gray;
+  border-style: solid;
+  text-align: right;
+}
+
+.display {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+#secondary {
+  font-size: 12px;
+  line-height: 20px;
+  min-height: 20px;
+}
+
+#primary {
+  min-height: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#operations-list {
+  margin-left: 20px;
+  border: 2px solid gray;
+  border-radius: 5px;
+  padding: 5px 10px;
+  min-width: 150px;
+  max-height: 230px;
+  overflow: auto;
+  scroll-behavior: smooth;
+  text-align: center;
+}
+#operations-list .operation {
+  border-bottom: 1px solid gray;
+  margin: 2px;
+  max-height: 20px;
+  display: block;
+}
