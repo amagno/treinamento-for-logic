@@ -19,26 +19,59 @@
       margin: 100px auto;
       display: flex;
       flex-wrap: wrap;
+      border: 2px solid gray;
+      padding: 25px;
+      background-color: #f2f2f2;
+      border-radius: 5px;
     }
     .calc-display {
       width: 100%;
     }
+    .calc-keys {
+      margin-top: 10px;
+    }
     .key {
-      margin: 2px 0;
+      margin: 2px 1px;
       padding: 5px;
       width: 50px;
+      border: 1px solid gray;
+      cursor: pointer;
+      font-weight: bold;
+      outline: none;
+    }
+    .key:hover {
+      background-color: #4ceb71;
+    }
+    .key.operation {
+      background-color: #b2b2b2;
+    }
+    .key.operation:hover {
+      background-color: #4ceb71;
     }
     .display {
-      border: 1px solid gray;
+      
+      padding-right: 5px;
+      padding-left: 5px;
+
     }
     #secondary {
-      height: 15px;
+      border-width: 1px 1px 0 1px;
+      border-color: gray;
+      border-style: solid;
       font-size: 12px;
-      line-height: 15px;
+      line-height: 20px;
+      min-height: 20px;
+      background-color: #d0f5d9
     }
     #primary {
-      height: 25px;
-      line-height: 25px;
+      border-width: 1px;
+      border-color: gray;
+      border-style: solid;
+      background-color: #97efab;
+      min-height: 30px;
+      line-height: 30px;
+      font-size: 18px;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -61,13 +94,14 @@
       <button class="key number">2</button>
       <button class="key number">1</button>
       <button class="key operation" onclick="makeOperation('*', operations.multiply)">*</button>
-      <button class="key number">0</button>
       <button class="key operation" onclick="equals()">=</button>
+      <button class="key number">0</button>
       <button class="key operation" onclick="clearDisplay()">AC</button>
       <button class="key operation" onclick="makeOperation('/', operations.division)">/</button>
     </div>
   </div>
   <script>
+    // selectors
     const primaryDisplay = document.getElementById('primary');
     const secondaryDisplay = document.getElementById('secondary');
     const keyList = Array.from(document.querySelectorAll('.key.number'));
@@ -78,8 +112,6 @@
       multiply: (a,b) => a * b,
       division: (a,b) => a / b
     };
-    // Key press flag
-    let flag;
     // Cache value operation
     let cachePrimaryValue;
     let cacheSecondaryValue;
@@ -91,56 +123,46 @@
       // debugger;
       const primaryValue = primaryDisplay.innerText;
       const secondaryValue = secondaryDisplay.innerText;
-
-      console.table({
-        primary: [cachePrimaryValue, typeof cachePrimaryValue],
-        secondary: [cacheSecondaryValue, typeof cacheSecondaryValue],
-      });
-
+      // Change operation
       if (cacheOperation !== operation && secondaryValue) {
-        console.log('operation change');
         const sub = secondaryValue.substr(0, (secondaryValue.length - 2));;
         secondaryDisplay.innerHTML = `${sub} ${signal}`;
         cacheOperation = operation;
         cacheSecondaryValue = undefined;
         return;
       }
+      // First operation
       if (!secondaryValue && primaryValue) {
-        console.log('primary value')
         secondaryDisplay.innerHTML = `${primaryValue} ${signal}`;
         cachePrimaryValue = primaryValue;
         cacheOperation = operation;
-        // flag = false;
         cacheSecondaryValue = undefined;
         return;
       }
-
+      // Operation signal result
       if (cacheSecondaryValue && secondaryValue) {
-        console.log('flag secondary value')
         secondaryDisplay.innerHTML = `${secondaryValue} ${primaryValue} ${signal}`;
         const result = operation(parseInt(cachePrimaryValue), parseInt(primaryValue));
         primaryDisplay.innerHTML = result;
         cachePrimaryValue = result;
         cacheSecondaryValue = undefined;
         cacheOperation = operation;
-        // flag = false;
         return;
       }
 
     }
     // Equals function
     function equals() {
-      // console.log('equals', cachePrimaryValue, cacheSecondaryValue, cacheOperation);
-      console.table({
-        primary: [cachePrimaryValue, typeof cachePrimaryValue],
-        secondary: [cacheSecondaryValue, typeof cacheSecondaryValue],
-      });
-      if (typeof cacheOperation === 'function' && cacheSecondaryValue) {
+      // if not exists keypad cache
+      if (!cacheSecondaryValue) {
+        cacheSecondaryValue = cachePrimaryValue;
+      }
+
+      if (typeof cacheOperation === 'function') {
         const result = cacheOperation(parseInt(cachePrimaryValue), parseInt(cacheSecondaryValue));
         cachePrimaryValue = result;
         secondaryDisplay.innerHTML = '';
         primaryDisplay.innerHTML = result;
- 
       }
     }
     // Clear display
@@ -148,11 +170,10 @@
       cacheOperation = undefined;
       cachePrimaryValue = undefined;
       cacheSecondaryValue = undefined;
-      flag = undefined;
       secondaryDisplay.innerHTML =  '';
       primaryDisplay.innerHTML = '';
     }
-    // Keypad
+    // Keypad and set secondary cache
     keyList.forEach(n => n.addEventListener('click', (event) => {
       if (!cacheSecondaryValue) {
         cacheSecondaryValue = event.target.innerText;
