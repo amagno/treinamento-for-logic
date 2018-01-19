@@ -24,9 +24,6 @@
       background-color: #f2f2f2;
       border-radius: 5px;
     }
-    .calc-display {
-      width: 100%;
-    }
     .calc-keys {
       margin-top: 10px;
     }
@@ -48,26 +45,23 @@
     .key.operation:hover {
       background-color: #4ceb71;
     }
-    .display {
-      
-      padding-right: 5px;
-      padding-left: 5px;
-
-    }
-    #secondary {
-      border-width: 1px 1px 0 1px;
-      border-color: gray;
-      border-style: solid;
-      font-size: 12px;
-      line-height: 20px;
-      min-height: 20px;
-      background-color: #d0f5d9
-    }
-    #primary {
+    .calc-display {
+      width: 100%;
+      background-color: #97efab;
       border-width: 1px;
       border-color: gray;
       border-style: solid;
-      background-color: #97efab;
+    }
+    .display {
+      padding-right: 5px;
+      padding-left: 5px;
+    }
+    #secondary {
+      font-size: 12px;
+      line-height: 20px;
+      min-height: 20px;
+    }
+    #primary {
       min-height: 30px;
       line-height: 30px;
       font-size: 18px;
@@ -82,25 +76,25 @@
       <div id="primary" class="display"></div>
     </div>
     <div class="calc-keys">
-      <button class="key number">7</button>
-      <button class="key number">8</button>
-      <button class="key number">9</button>
-      <button class="key operation" onclick="makeOperation('+', operations.sum)">+</button>
-      <button class="key number">6</button>
-      <button class="key number">5</button>
-      <button class="key number">4</button>
-      <button class="key operation" onclick="makeOperation('-', operations.minus)">-</button>
-      <button class="key number">3</button>
-      <button class="key number">2</button>
-      <button class="key number">1</button>
-      <button class="key operation" onclick="makeOperation('*', operations.multiply)">*</button>
-      <button class="key operation" onclick="equals()">=</button>
-      <button class="key number">0</button>
-      <button class="key operation" onclick="clearDisplay()">AC</button>
-      <button class="key operation" onclick="makeOperation('/', operations.division)">/</button>
+      <button class="key number"    data-key="103">7</button>
+      <button class="key number"    data-key="104">8</button>
+      <button class="key number"    data-key="105">9</button>
+      <button class="key operation" data-key="107" onclick="makeOperation('+', operations.sum)">+</button>
+      <button class="key number"    data-key="102">6</button>
+      <button class="key number"    data-key="101">5</button>
+      <button class="key number"    data-key="100">4</button>
+      <button class="key operation" data-key="109" onclick="makeOperation('-', operations.minus)">-</button>
+      <button class="key number"    data-key="99">3</button>
+      <button class="key number"    data-key="98">2</button>
+      <button class="key number"    data-key="97">1</button>
+      <button class="key operation" data-key="106" onclick="makeOperation('*', operations.multiply)">*</button>
+      <button class="key operation" data-key="13" onclick="equals()">=</button>
+      <button class="key number"    data-key="96">0</button>
+      <button class="key operation" data-key="8" onclick="clearDisplay()">AC</button>
+      <button class="key operation" data-key="111" onclick="makeOperation('/', operations.division)">/</button>
     </div>
   </div>
-  <script>
+  <script type="text/javascript">
     // selectors
     const primaryDisplay = document.getElementById('primary');
     const secondaryDisplay = document.getElementById('secondary');
@@ -117,8 +111,13 @@
     let cacheSecondaryValue;
     // Cache operation function
     let cacheOperation;
-    
 
+    const logCaches = (type = '') => {
+      console.log('Primary: ', cachePrimaryValue);
+      console.log('Secondary: ', cacheSecondaryValue);
+      console.log(type)
+    }
+    // make operation receive string signal and callback()
     function makeOperation(signal, operation) {
       // debugger;
       const primaryValue = primaryDisplay.innerText;
@@ -142,7 +141,7 @@
       // Operation signal result
       if (cacheSecondaryValue && secondaryValue) {
         secondaryDisplay.innerHTML = `${secondaryValue} ${primaryValue} ${signal}`;
-        const result = operation(parseInt(cachePrimaryValue), parseInt(primaryValue));
+        const result = operation(parseFloat(cachePrimaryValue), parseFloat(primaryValue));
         primaryDisplay.innerHTML = result;
         cachePrimaryValue = result;
         cacheSecondaryValue = undefined;
@@ -154,12 +153,14 @@
     // Equals function
     function equals() {
       // if not exists keypad cache
+      logCaches('equal');
       if (!cacheSecondaryValue) {
         cacheSecondaryValue = cachePrimaryValue;
       }
 
+      // Operation cache
       if (typeof cacheOperation === 'function') {
-        const result = cacheOperation(parseInt(cachePrimaryValue), parseInt(cacheSecondaryValue));
+        const result = cacheOperation(parseFloat(cachePrimaryValue), parseFloat(cacheSecondaryValue));
         cachePrimaryValue = result;
         secondaryDisplay.innerHTML = '';
         primaryDisplay.innerHTML = result;
@@ -175,7 +176,9 @@
     }
     // Keypad and set secondary cache
     keyList.forEach(n => n.addEventListener('click', (event) => {
-      if (!cacheSecondaryValue) {
+      // if (event.target.innerText == '0' && !cacheSecondaryValue) return;
+      logCaches();
+      if (!cacheSecondaryValue || cachePrimaryValue) {
         cacheSecondaryValue = event.target.innerText;
         primaryDisplay.innerHTML = cacheSecondaryValue;
         return;
@@ -183,6 +186,13 @@
       cacheSecondaryValue = cacheSecondaryValue + event.target.innerText;
       primaryDisplay.innerHTML = cacheSecondaryValue;
     }));
+    // keyup event
+    window.addEventListener('keyup', (event) => {
+      const el = document.querySelector(`.key[data-key="${event.keyCode}"]`);
+      if (el) {
+        el.click();
+      }
+    })
   </script>
 </body>
 </html>
