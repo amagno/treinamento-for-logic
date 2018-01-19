@@ -1,0 +1,14 @@
+{
+  "name": "atividade-4",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "babel main.js -o build.js",
+    "fix": "eslint main.js --fix"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "eslint": "4.9.0"
+  }
+}

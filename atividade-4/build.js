@@ -1,26 +1,36 @@
+'use strict';
+
 // selectors
-const primaryDisplay = document.getElementById('primary');
-const secondaryDisplay = document.getElementById('secondary');
-const keyList = Array.from(document.querySelectorAll('.key.number'));
-const containerList = document.getElementById('operations-list');
+var primaryDisplay = document.getElementById('primary');
+var secondaryDisplay = document.getElementById('secondary');
+var keyList = Array.from(document.querySelectorAll('.key.number'));
+var containerList = document.getElementById('operations-list');
 containerList.classList.add('hide');
 // Operations functions
-const operations = {
-  sum: (a, b) => a + b,
-  minus: (a, b) => a - b,
-  multiply: (a, b) => a * b,
-  division: (a, b) => a / b,
+var operations = {
+  sum: function sum(a, b) {
+    return a + b;
+  },
+  minus: function minus(a, b) {
+    return a - b;
+  },
+  multiply: function multiply(a, b) {
+    return a * b;
+  },
+  division: function division(a, b) {
+    return a / b;
+  }
 };
 // Cache value operation
-let cachePrimaryValue;
-let cacheSecondaryValue;
+var cachePrimaryValue = void 0;
+var cacheSecondaryValue = void 0;
 // Cache operation function
-let cacheOperation;
-let cacheSignal;
+var cacheOperation = void 0;
+var cacheSignal = void 0;
 // Equal flag
-let equal = false;
+var equal = false;
 // Operation Array List
-let operationsList = [];
+var operationsList = [];
 // Clear list and container
 function clearOperationList() {
   operationsList = [];
@@ -30,25 +40,27 @@ function clearOperationList() {
 // insert operationList array into DOM
 function insertOperationsList(list) {
   containerList.classList.remove('hide');
-  let opList = '';
-  list.forEach((op) => {
-    opList += `<div class="operation">${op.primary} ${op.signal} ${op.secondary} = ${op.result}</div>`;
+  var opList = '';
+  list.forEach(function (op) {
+    opList += '<div class="operation">' + op.primary + ' ' + op.signal + ' ' + op.secondary + ' = ' + op.result + '</div>';
   });
-  containerList.innerHTML = `${opList}<button style="width: 100%;" class="key" onClick="clearOperationList()">Clear</button>`;
+  containerList.innerHTML = opList + '<button style="width: 100%;" class="key" onClick="clearOperationList()">Clear</button>';
   containerList.scrollTo(0, containerList.scrollHeight);
 }
 // Insert operation on list operation array
 function insertOperation(primary, secondary, signal, result) {
   operationsList.push({
-    primary,
-    secondary,
-    signal,
-    result,
+    primary: primary,
+    secondary: secondary,
+    signal: signal,
+    result: result
   });
   insertOperationsList(operationsList);
 }
 // for dev
-const logCaches = (type = '') => {
+var logCaches = function logCaches() {
+  var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
   console.log('Primary: ', cachePrimaryValue);
   console.log('Secondary: ', cacheSecondaryValue);
   console.log(type);
@@ -57,12 +69,12 @@ const logCaches = (type = '') => {
 function makeOperation(signal, operation) {
   // debugger;
   logCaches('makeOperation');
-  const primaryValue = primaryDisplay.innerText;
-  const secondaryValue = secondaryDisplay.innerText;
+  var primaryValue = primaryDisplay.innerText;
+  var secondaryValue = secondaryDisplay.innerText;
   // Change operation
   if (cacheOperation !== operation && secondaryValue) {
-    const sub = secondaryValue.substr(0, (secondaryValue.length - 2));
-    secondaryDisplay.innerHTML = `${sub} ${signal}`;
+    var sub = secondaryValue.substr(0, secondaryValue.length - 2);
+    secondaryDisplay.innerHTML = sub + ' ' + signal;
     cacheOperation = operation;
     cacheSignal = signal;
     cacheSecondaryValue = undefined;
@@ -70,7 +82,7 @@ function makeOperation(signal, operation) {
   }
   // First operation
   if (!secondaryValue && primaryValue) {
-    secondaryDisplay.innerHTML = `${primaryValue} ${signal}`;
+    secondaryDisplay.innerHTML = primaryValue + ' ' + signal;
     cachePrimaryValue = primaryValue;
     cacheOperation = operation;
     cacheSignal = signal;
@@ -79,8 +91,8 @@ function makeOperation(signal, operation) {
   }
   // Operation signal result
   if (cacheSecondaryValue && secondaryValue) {
-    secondaryDisplay.innerHTML = `${secondaryValue} ${primaryValue} ${signal}`;
-    const result = operation(parseFloat(cachePrimaryValue), parseFloat(primaryValue));
+    secondaryDisplay.innerHTML = secondaryValue + ' ' + primaryValue + ' ' + signal;
+    var result = operation(parseFloat(cachePrimaryValue), parseFloat(primaryValue));
     primaryDisplay.innerHTML = result;
     cachePrimaryValue = result;
     cacheSecondaryValue = undefined;
@@ -96,7 +108,7 @@ function equals() {
   }
   // Operation cache
   if (typeof cacheOperation === 'function') {
-    const result = cacheOperation(parseFloat(cachePrimaryValue), parseFloat(cacheSecondaryValue));
+    var result = cacheOperation(parseFloat(cachePrimaryValue), parseFloat(cacheSecondaryValue));
     insertOperation(cachePrimaryValue, cacheSecondaryValue, cacheSignal, result);
     cachePrimaryValue = result;
     secondaryDisplay.innerHTML = '';
@@ -114,39 +126,41 @@ function clearDisplay() {
   primaryDisplay.innerHTML = '0';
 }
 // Keypad and set secondary cache
-keyList.forEach(n => n.addEventListener('click', (event) => {
-  logCaches('click event');
-  const value = event.target.innerText;
-  // not accept 0
-  if (value == 0) return;
-  // set cache count
-  const count = cacheSecondaryValue ? cacheSecondaryValue.length : 0;
-  // Max digits
-  if (count > 19) return;
-  // Reset primary display7
-  if (!cacheSecondaryValue || equal) {
-    cacheSecondaryValue = value;
+keyList.forEach(function (n) {
+  return n.addEventListener('click', function (event) {
+    logCaches('click event');
+    var value = event.target.innerText;
+    // not accept 0
+    if (value == 0) return;
+    // set cache count
+    var count = cacheSecondaryValue ? cacheSecondaryValue.length : 0;
+    // Max digits
+    if (count > 19) return;
+    // Reset primary display7
+    if (!cacheSecondaryValue || equal) {
+      cacheSecondaryValue = value;
+      primaryDisplay.innerHTML = cacheSecondaryValue;
+      equal = false;
+      return;
+    }
+    cacheSecondaryValue += value;
     primaryDisplay.innerHTML = cacheSecondaryValue;
-    equal = false;
-    return;
-  }
-  cacheSecondaryValue += value;
-  primaryDisplay.innerHTML = cacheSecondaryValue;
-}));
+  });
+});
 // Numeric Key event
-window.addEventListener('keydown', (event) => {
+window.addEventListener('keydown', function (event) {
   if (!event.metaKey) {
     event.preventDefault();
   }
-  const el = document.querySelector(`.key[data-key="${event.keyCode}"]`);
+  var el = document.querySelector('.key[data-key="' + event.keyCode + '"]');
   if (el) {
     el.classList.add('pressed');
     el.click();
   }
 });
 // Remove class pressed
-window.addEventListener('keyup', (event) => {
-  const el = document.querySelector(`.key[data-key="${event.keyCode}"]`);
+window.addEventListener('keyup', function (event) {
+  var el = document.querySelector('.key[data-key="' + event.keyCode + '"]');
   if (el) {
     el.classList.remove('pressed');
   }
