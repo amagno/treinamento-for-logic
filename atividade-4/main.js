@@ -47,24 +47,13 @@ function insertOperation(primary, secondary, signal, result) {
   });
   insertOperationsList(operationsList);
 }
-// for dev
-const logCaches = (type = '') => {
-  console.log('Primary: ', cachePrimaryValue);
-  console.log('Secondary: ', cacheSecondaryValue);
-  console.log(type);
-};
 // make operation receive string signal and callback()
 function makeOperation(signal, operation) {
   // debugger;
-  logCaches('makeOperation');
   const primaryValue = primaryDisplay.innerText;
   const secondaryValue = secondaryDisplay.innerText;
-  
+  // not accept 0 for operations
   if (primaryValue == '0') return;
-  console.log(primaryValue);  
-  console.log(secondaryValue);
-  console.log(signal);
-  // if (signal == '/' && primaryValue == '0') return;
   // Change operation
   if (cacheOperation !== operation && secondaryValue) {
     const sub = secondaryValue.substr(0, (secondaryValue.length - 2));
@@ -109,7 +98,6 @@ function equals() {
     primaryDisplay.innerHTML = result;
     equal = true;
   }
-  logCaches('equal function');
 }
 // Clear display
 function clearDisplay() {
@@ -121,7 +109,6 @@ function clearDisplay() {
 }
 // Keypad and set secondary cache
 keyList.forEach(n => n.addEventListener('click', (event) => {
-  logCaches('click event');
   const value = event.target.innerText;
   // not accept 0
   if (value == 0 && !cacheSecondaryValue) return;
@@ -144,7 +131,6 @@ window.addEventListener('keydown', (event) => {
   if (!event.metaKey) {
     event.preventDefault();
   }
-  console.log(event.keyCode);
   const el = document.querySelector(`.key[data-key="${event.keyCode}"]`);
   if (el) {
     el.classList.add('pressed');

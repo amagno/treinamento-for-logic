@@ -56,27 +56,15 @@ function insertOperation(primary, secondary, signal, result) {
     result: result
   });
   insertOperationsList(operationsList);
-} // for dev
-
-
-var logCaches = function logCaches() {
-  var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-  console.log('Primary: ', cachePrimaryValue);
-  console.log('Secondary: ', cacheSecondaryValue);
-  console.log(type);
-}; // make operation receive string signal and callback()
+} // make operation receive string signal and callback()
 
 
 function makeOperation(signal, operation) {
   // debugger;
-  logCaches('makeOperation');
   var primaryValue = primaryDisplay.innerText;
-  var secondaryValue = secondaryDisplay.innerText;
-  if (primaryValue == '0') return;
-  console.log(primaryValue);
-  console.log(secondaryValue);
-  console.log(signal); // if (signal == '/' && primaryValue == '0') return;
-  // Change operation
+  var secondaryValue = secondaryDisplay.innerText; // not accept 0 for operations
+
+  if (primaryValue == '0') return; // Change operation
 
   if (cacheOperation !== operation && secondaryValue) {
     var sub = secondaryValue.substr(0, secondaryValue.length - 2);
@@ -125,8 +113,6 @@ function equals() {
     primaryDisplay.innerHTML = result;
     equal = true;
   }
-
-  logCaches('equal function');
 } // Clear display
 
 
@@ -141,7 +127,6 @@ function clearDisplay() {
 
 keyList.forEach(function (n) {
   return n.addEventListener('click', function (event) {
-    logCaches('click event');
     var value = event.target.innerText; // not accept 0
 
     if (value == 0 && !cacheSecondaryValue) return; // set cache count
@@ -167,7 +152,6 @@ window.addEventListener('keydown', function (event) {
     event.preventDefault();
   }
 
-  console.log(event.keyCode);
   var el = document.querySelector(".key[data-key=\"".concat(event.keyCode, "\"]"));
 
   if (el) {
