@@ -59,6 +59,12 @@ function makeOperation(signal, operation) {
   logCaches('makeOperation');
   const primaryValue = primaryDisplay.innerText;
   const secondaryValue = secondaryDisplay.innerText;
+  
+  if (primaryValue == '0') return;
+  console.log(primaryValue);  
+  console.log(secondaryValue);
+  console.log(signal);
+  // if (signal == '/' && primaryValue == '0') return;
   // Change operation
   if (cacheOperation !== operation && secondaryValue) {
     const sub = secondaryValue.substr(0, (secondaryValue.length - 2));
@@ -118,7 +124,7 @@ keyList.forEach(n => n.addEventListener('click', (event) => {
   logCaches('click event');
   const value = event.target.innerText;
   // not accept 0
-  if (value == 0) return;
+  if (value == 0 && !cacheSecondaryValue) return;
   // set cache count
   const count = cacheSecondaryValue ? cacheSecondaryValue.length : 0;
   // Max digits
@@ -138,6 +144,7 @@ window.addEventListener('keydown', (event) => {
   if (!event.metaKey) {
     event.preventDefault();
   }
+  console.log(event.keyCode);
   const el = document.querySelector(`.key[data-key="${event.keyCode}"]`);
   if (el) {
     el.classList.add('pressed');
