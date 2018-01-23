@@ -52,10 +52,10 @@ module.exports = {
   devtool: 'source-map',
   plugins: [
     new ExtractTextPlugin('styles.css'),
-    // new webpack.ProvidePlugin({
-    //   $: 'jquery',
-    //   jQuery: 'jquery',
-    // })
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+    })
   ],
   devServer: {
     proxy: { // proxy URLs to backend development server

@@ -45,32 +45,32 @@
             <!-- FORM CONTACT -->
             <form class="needs-validation" novalidate id="contact-new-form">
               <!-- FAVORITE HIDDEN CHECKBOX -->
-              <input class="invisible" type="checkbox" id="contact-new-favorite-checkbox" name="favorite">
+              <input class="invisible" type="checkbox" id="contact-new-favorite-checkbox" name="favorite" value="true">
               <!-- FAVORITE HIDDEN CHECKBOX -->              
               <div class="form-row">
-                <div class="col-md-4 mb-3">
-                  <label for="validationCustom01">Nome <b class="text-danger">*</b></label>
-                  <input type="text" class="form-control" id="validationCustom01" placeholder="First name" name="firstName" required>
+                <div class="col-md">
+                  <label for="firstName">Nome <b class="text-danger">*</b></label>
+                  <input type="text" class="form-control" id="firstName" placeholder="Nome" name="firstName" required>
                   <div class="invalid-feedback">
                     Por favor escolha um nome válido!
                   </div>
                 </div>
-                <div class="col-md-4 mb-3">
-                  <label for="validationCustom02">Sobrenome <b class="text-danger">*</b></label>
-                  <input type="text" class="form-control" id="validationCustom02" placeholder="Sobrenome" name="lastName" required>
+                <div class="col-md-4">
+                  <label for="lastName">Sobrenome <b class="text-danger">*</b></label>
+                  <input type="text" class="form-control" id="lastName" placeholder="Sobrenome" name="lastName" required>
                   <div class="invalid-feedback">
                     Por favor escolha um sobrenome válido!                    
                   </div>
                 </div>
-                <div class="col-md-4 mb-3">
-                  <label for="validationCustomUsername">E-mail <b class="text-danger">*</b></label>
+                <div class="col-md-4">
+                  <label for="email">E-mail <b class="text-danger">*</b></label>
                   <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text" id="inputGroupPrepend">
+                      <span class="input-group-text" id="inputGroupPrependEmail">
                         <i class="material-icons">email</i>
                       </span>
                     </div>
-                    <input type="email" class="form-control" id="validationCustomUsername" placeholder="E-mail" aria-describedby="inputGroupPrepend" required>
+                    <input type="email" class="form-control" id="email" placeholder="E-mail" aria-describedby="inputGroupPrependEmail" name="email" required>
                     <div class="invalid-feedback">
                       Por favor escolha um e-mail válido!
                     </div>
@@ -78,38 +78,45 @@
                 </div>
               </div>
               <div class="form-row">
-                <div class="col-md-6 mb-3">
-                  <label for="validationCustom03">City</label>
-                  <input type="text" class="form-control" id="validationCustom03" placeholder="City" required>
-                  <div class="invalid-feedback">
+                <div class="col-md-6">
+                  <label for="address">Endereço</label>
+                  <input type="text" class="form-control" id="address" placeholder="Digite o endereço" name="info.address">
+                  <!-- <div class="invalid-feedback">
                     Please provide a valid city.
-                  </div>
+                  </div> -->
                 </div>
-                <div class="col-md-3 mb-3">
-                  <label for="validationCustom04">State</label>
-                  <input type="text" class="form-control" id="validationCustom04" placeholder="State" required>
-                  <div class="invalid-feedback">
+                <div class="col-md-3 ">
+                  <label for="company">Empresa</label>
+                  <input type="text" class="form-control" id="company" placeholder="Digite o nome da empresa" name="info.company">
+                  <!-- <div class="invalid-feedback">
                     Please provide a valid state.
-                  </div>
+                  </div> -->
                 </div>
-                <div class="col-md-3 mb-3">
-                  <label for="validationCustom05">Zip</label>
-                  <input type="text" class="form-control" id="validationCustom05" placeholder="Zip" required>
-                  <div class="invalid-feedback">
+                <div class="col-md-3 ">
+                  <label for="phone">Telefone</label>
+                  <input type="text" class="form-control" id="phone" placeholder="Telefone" name="info.phone">
+                  <!-- <div class="invalid-feedback">
                     Please provide a valid zip.
-                  </div>
+                  </div> -->
+                </div>
+                <div class="col-md-12 ">
+                  <label for="comments">Comentários</label>
+                  <input type="text" class="form-control" id="phone" placeholder="Comentários" name="info.comments">
+                  <!-- <div class="invalid-feedback">
+                    Please provide a valid zip.
+                  </div> -->
                 </div>
               </div>
               <div class="form-group p-2">
                 <span>Sexo <b class="text-danger">*</b></span>
                 <div class="custom-control custom-radio">
-                  <input type="radio" class="custom-control-input" id="gender-female" name="gender" required>
+                  <input type="radio" class="custom-control-input" id="gender-female" name="gender" value="female" required>
                   <label class="custom-control-label" for="gender-female">
                     Mulher
                   </label>
                 </div>
                 <div class="custom-control custom-radio mb-3">
-                  <input type="radio" class="custom-control-input" id="gender-male" name="gender" required>
+                  <input type="radio" class="custom-control-input" id="gender-male" name="gender" value="male" required>
                   <label class="custom-control-label" for="gender-male">
                     Homem
                   </label>
@@ -119,8 +126,7 @@
               <div class="form-row">
                 <button class="btn btn-primary d-flex mr-2 text-uppercase" type="submit">Submit form<i class="material-icons ml-1">done</i></button>
                 <button class="btn btn-danger d-flex mr-2 text-uppercase" type="reset" id="contact-new-close-button">LIMPAR<i class="material-icons ml-1">delete</i></button>
-                <button class="btn btn-outline-primary d-flex text-uppercase" type="button" id="contact-new-favorite-button">FAVORITO<i class="material-icons ml-1">star_border</i></button>
-                
+                <button class="btn btn-outline-secondary d-flex text-uppercase" type="button" id="contact-new-favorite-button">FAVORITO<i class="material-icons ml-1">star_border</i></button>
               </div>
             </form>
 

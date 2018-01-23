@@ -2,7 +2,7 @@ const contactItem = (contact) => `
   <div class="col-12 col-md-6 col-xl-4 mt-1 mb-1">
     <div class="card">
     <div class="card-header d-flex h-100">
-      <img class="card-img-top mr-3" src="${contact.info.avatar}" alt="${contact.firstName}" style="width: 50px; height: 50px;">
+      <img class="rounded w-25 h-25 mr-3" src="${contact.info.avatar}" alt="${contact.firstName}" style="min-width: 50px; min-height: 50px;">
       <div class="w-100 text-left">
         <div class="d-flex justify-content-between">
           <b class="text-uppercase">${contact.firstName} ${contact.lastName}</b>
@@ -25,13 +25,14 @@ const makeContactsList = (contacts = [], jqueryContainer) => {
   contacts.forEach(contact => {
     html += contactItem(contact);
   });
-  jqueryContainer.html(html);
+  jqueryContainer.html(html).fadeIn(300);
 };
 
 
 export const fetchAndMakeContactsList = ($, containerClass, urlApi) => {
   $.get(urlApi)
   .done(data => {
+    console.log(data);
     makeContactsList(data, $(containerClass));
   })
   .catch(error => {
