@@ -1,1 +1,6 @@
 @import "~bootstrap/scss/bootstrap";
+.collapsing {
+  // display: none !important;
+  height: auto !important;
+  transition: height 0 ease !important;
+}

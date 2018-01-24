@@ -1,14 +1,19 @@
-import $ from 'jquery';
-import Util from 'bootstrap/js/src/util';
-import 'bootstrap/js/dist/collapse';
 import './styles.scss';
 
-import { fetchAndMakeContactsList } from './contactsList';
+import { fetchContacts, makeContactsList } from './contactsList';
 import { initFormContactToggle } from './newContactForm';
 
 
 $(document).ready(() => {
-  window.Util = Util;
-  fetchAndMakeContactsList($, '.contacts-list', 'http://localhost:3000/v1/contacts');
+  fetchContacts();
+  window.addEventListener('contacts-fetch', (event) => {
+    console.log('Contacts fetched!', event);
+    makeContactsList(window.__CONTACTS__STORE__, $('.contacts-list'));
+  });
+  window.addEventListener('open-form-update', () => {
+    formElement[0].dataset.formType = 'update';
+    openForm(newButton, formElement);
+  });
+  // fetchAndMakeContactsList();
   initFormContactToggle();
 });

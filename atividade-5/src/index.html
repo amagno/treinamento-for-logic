@@ -8,6 +8,9 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="dist/styles.css">
   <title>Document</title>
+  <script>
+    window.__CONTACTS__STORE__ = [];
+  </script>
 </head>
 
 <body>
@@ -43,7 +46,7 @@
           </div>
           <!-- ROW -->
             <!-- FORM CONTACT -->
-            <form class="needs-validation" novalidate id="contact-new-form">
+            <form class="needs-validation" novalidate id="contact-new-form" data-form-type>
               <!-- FAVORITE HIDDEN CHECKBOX -->
               <input class="invisible" type="checkbox" id="contact-new-favorite-checkbox" name="favorite" value="true">
               <!-- FAVORITE HIDDEN CHECKBOX -->              
@@ -80,28 +83,28 @@
               <div class="form-row">
                 <div class="col-md-6">
                   <label for="address">Endereço</label>
-                  <input type="text" class="form-control" id="address" placeholder="Digite o endereço" name="info.address">
+                  <input type="text" class="form-control" id="address" placeholder="Digite o endereço" name="info-address">
                   <!-- <div class="invalid-feedback">
                     Please provide a valid city.
                   </div> -->
                 </div>
                 <div class="col-md-3 ">
                   <label for="company">Empresa</label>
-                  <input type="text" class="form-control" id="company" placeholder="Digite o nome da empresa" name="info.company">
+                  <input type="text" class="form-control" id="company" placeholder="Digite o nome da empresa" name="info-company">
                   <!-- <div class="invalid-feedback">
                     Please provide a valid state.
                   </div> -->
                 </div>
                 <div class="col-md-3 ">
                   <label for="phone">Telefone</label>
-                  <input type="text" class="form-control" id="phone" placeholder="Telefone" name="info.phone">
+                  <input type="text" class="form-control" id="phone" placeholder="Telefone" name="info-phone">
                   <!-- <div class="invalid-feedback">
                     Please provide a valid zip.
                   </div> -->
                 </div>
                 <div class="col-md-12 ">
                   <label for="comments">Comentários</label>
-                  <input type="text" class="form-control" id="phone" placeholder="Comentários" name="info.comments">
+                  <textarea type="text" class="form-control" id="comments" placeholder="Comentários" name="info-comments"></textarea>
                   <!-- <div class="invalid-feedback">
                     Please provide a valid zip.
                   </div> -->
@@ -110,13 +113,13 @@
               <div class="form-group p-2">
                 <span>Sexo <b class="text-danger">*</b></span>
                 <div class="custom-control custom-radio">
-                  <input type="radio" class="custom-control-input" id="gender-female" name="gender" value="female" required>
+                  <input type="radio" class="custom-control-input" id="gender-female" name="gender" value="f" required>
                   <label class="custom-control-label" for="gender-female">
                     Mulher
                   </label>
                 </div>
                 <div class="custom-control custom-radio mb-3">
-                  <input type="radio" class="custom-control-input" id="gender-male" name="gender" value="male" required>
+                  <input type="radio" class="custom-control-input" id="gender-male" name="gender" value="m" required>
                   <label class="custom-control-label" for="gender-male">
                     Homem
                   </label>
