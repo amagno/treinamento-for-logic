@@ -13,24 +13,18 @@ export const sanitizeContactsData = (contacts = []) => {
     }
     return {
       _id: contact._id,
-      firstName: contact.firstName,
-      lastName: contact.lastName,
-      email: contact.email,
+      firstName: contact.firstName.toLowerCase(),
+      lastName: contact.lastName.toLowerCase(),
+      email: contact.email.toLowerCase(),
       isFavorite: contact.isFavorite,
-      gender: contact.gender,
+      gender: contact.gender.toLowerCase(),
       info: contact.info
     };
   });
 };
 export const filterContacts = (key, data = []) => {
   return data.sort((a, b) => {
-    if (a[key] > b[key]) {
-      return 1;
-    }
-    if (a[key] < b[key]) {
-      return -1;
-    }
-    return 0;
+    return a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0;
   });
 };
 export const store = {
@@ -69,10 +63,13 @@ export const fetchAllContacts = (url = urlApi, $ = jquery) => {
         ...response
       ]);
       console.log('fetch: ', data);
+      store.dispatch('contacts-loading-show');
       store.setStore(data);
       store.dispatch('contacts-fetch');
+      store.dispatch('contacts-loading-hide');
     })
     .catch(error => console.error(error));
+    
 };
 export const createContact = (contact, url = urlApi, $ = jquery) => {
   $.post(url, contact)
@@ -83,11 +80,14 @@ export const createContact = (contact, url = urlApi, $ = jquery) => {
         contact
       ]);
       console.log('created: ', data);
+      store.dispatch('contacts-loading-show');
       store.setStore(data);
       store.dispatch('contacts-fetch');
+      store.dispatch('contacts-loading-hide');
     })
     .catch(error => console.log(error));
 };
+// go finish implement
 export const updateContact = (contactAttributes, id) => {
   const storeContact = store.findContactById(id);
   // contactAttributes.info.avatar = contactAttributes.info.avatar === defaultAvatarLink && storeContact.info.avatar
@@ -119,8 +119,35 @@ export const deleteContact = (id, url = urlApi, $ = jquery) => {
         console.log(response);
         // console.log(store.removeContactById(id));
         const data = sanitizeContactsData(store.removeContactById(id));
+        store.dispatch('contacts-loading-show');
         store.setStore(data);
         store.dispatch('contacts-fetch');
+        store.dispatch('contacts-loading-hide');
       })
       .catch(error => console.log(error));
+};
+export const handleFilterChange = (filter) => {
+  if (filter !== 'firstName' && filter !== 'lastName' && filter !== 'email') {
+    throw new Error(`Filter: ${filter} is invalid!`);
+  } 
+  store.dispatch('contacts-loading-show');
+  store.setFilter(filter);
+  store.dispatch('contacts-fetch');
+  store.dispatch('contacts-loading-hide');
+};
+export const handleSearch = (field, value, url = urlApi, $ = jquery) => {
+  const sU = `${url}?${field}=${value}`;
+  console.log(sU);
+  $.get(sU)
+    .done(response => {
+      console.log('Send reqeust search');
+      const data = sanitizeContactsData([
+        ...response
+      ]);
+      console.log(data);
+
+      store.setStore(data);
+      store.dispatch('contacts-fetch');
+    })
+    .catch(error => console.error(error));
 };

@@ -17,147 +17,173 @@
 <body>
   <div class="container-fluid">
     <div class="container">
-        <div class="la-ball-clip-rotate la-dark la-2x" >
-          <div></div>
-        </div>
-        <div class="mt-3">hello</div>
-        <div class="contacts-container" id="home">
-            <div class="card contacts-form mt-2 mb-2 row pr-3 pt-3 pl-3 pb-2">
-              <div class="row">
-                <div class="input-group mb-3 col-4">
-                  <!-- SEARCH FROM -->
-                  <div class="input-group-prepend">
-                    <button class="btn btn-outline-secondary d-flex" type="button" id="contact-button-search">
-                      <i class="material-icons">search</i>
-                    </button>
-                  </div>
-                  <input type="text" class="form-control" placeholder="Digite o nome..." aria-label="Username" aria-describedby="basic-addon1">
-                </div>
-                <!-- Button Form Contact -->
-                <div class="col-4">
-                  <!-- BUTTON FORM TOGGLE -->
-                  <button class="btn btn-outline-primary d-flex text-uppercase" id="contact-new-button">
-                    &nbsp;
-                  </button>
+
+      <div class="mt-3">hello</div>
+      <div class="contacts-container" id="home">
+        <div class="card contacts-form mt-2 mb-2 row pr-3 pt-3 pl-3 pb-2">
+          <div class="row conacts-serach">
+            <!-- Search input -->
+            <div class="input-group mb-3 col-12 col-md-6 col-xl-6">
+              <!-- SEARCH FROM -->
+              <div class="input-group-prepend">
+                <button class="btn btn-outline-secondary d-flex" type="button">
+                  <i class="material-icons">search</i>
+                </button>
+              </div>
+              <input type="text" class="form-control" id="contact-search-input" placeholder="Digite o nome..." aria-label="Search">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary dropdown-toggle search" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                  data-tooltip="true" data-placement="top" title="Campo de busca">Nome</button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item search" data-value="firstName" href="#">Nome</a>
+                  <a class="dropdown-item search" data-value="lastName" href="#">Sobrenome</a>
+                  <a class="dropdown-item search" data-value="email" href="#">E-mail</a>
                 </div>
               </div>
-              <!-- ROW -->
-              <!-- FORM CONTACT -->
-              <form class="needs-validation" novalidate id="contact-new-form" data-form-type style="display: none">
-                <!-- FAVORITE HIDDEN CHECKBOX -->
-                <input class="invisible" type="checkbox" id="contact-new-favorite-checkbox" name="favorite" value="true">
-                <!-- FAVORITE HIDDEN CHECKBOX -->
-                <div class="form-row">
-                  <div class="col-md">
-                    <label for="firstName">Nome
-                      <b class="text-danger">*</b>
-                    </label>
-                    <input type="text" class="form-control" id="firstName" placeholder="Nome" name="firstName" required>
-                    <div class="invalid-feedback">
-                      Por favor escolha um nome válido!
-                    </div>
+            </div>
+            <!-- Button Form Contact -->
+            <div class="form-group col-6 col-md-2 col-xl-2">
+              <select class="form-control" id="contacts-filter-order" data-tooltip="true" data-placement="top" title="Ordenar contatos">
+                <option value="firstName">Nome</option>
+                <option value="lastName">Sobrenome</option>
+                <option value="email">E-mail</option>
+              </select>
+            </div>
+            <div class="form-group col-6 col-md-2 col-xl-1">
+              <input type="text" class="form-control text-center">
+            </div>
+            <div class="form-group col-2 col-md-1 col-xl-1">
+
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button class="btn btn-outline-primary d-flex text-uppercase pr-3" id="contact-new-button">
+                  <i class="material-icons ml-1">person_add</i>
+                </button>
+                <button type="button" class="btn btn-secondary">Middle</button>
+                <button type="button" class="btn btn-secondary">Right</button>
+              </div>
+            </div>
+
+
+          </div>
+          <!-- ROW -->
+          <!-- FORM CONTACT -->
+          <form class="needs-validation" novalidate id="contact-new-form" data-form-type style="display: none">
+            <!-- FAVORITE HIDDEN CHECKBOX -->
+            <input class="invisible" type="checkbox" id="contact-new-favorite-checkbox" name="favorite" value="true">
+            <!-- FAVORITE HIDDEN CHECKBOX -->
+            <div class="form-row">
+              <div class="col-md">
+                <label for="firstName">Nome
+                  <b class="text-danger">*</b>
+                </label>
+                <input type="text" class="form-control" id="firstName" placeholder="Nome" name="firstName" required>
+                <div class="invalid-feedback">
+                  Por favor escolha um nome válido!
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="lastName">Sobrenome
+                  <b class="text-danger">*</b>
+                </label>
+                <input type="text" class="form-control" id="lastName" placeholder="Sobrenome" name="lastName" required>
+                <div class="invalid-feedback">
+                  Por favor escolha um sobrenome válido!
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="email">E-mail
+                  <b class="text-danger">*</b>
+                </label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupPrependEmail">
+                      <i class="material-icons">email</i>
+                    </span>
                   </div>
-                  <div class="col-md-4">
-                    <label for="lastName">Sobrenome
-                      <b class="text-danger">*</b>
-                    </label>
-                    <input type="text" class="form-control" id="lastName" placeholder="Sobrenome" name="lastName" required>
-                    <div class="invalid-feedback">
-                      Por favor escolha um sobrenome válido!
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="email">E-mail
-                      <b class="text-danger">*</b>
-                    </label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroupPrependEmail">
-                          <i class="material-icons">email</i>
-                        </span>
-                      </div>
-                      <input type="email" class="form-control" id="email" placeholder="E-mail" aria-describedby="inputGroupPrependEmail" name="email"
-                        required>
-                      <div class="invalid-feedback">
-                        Por favor escolha um e-mail válido!
-                      </div>
-                    </div>
+                  <input type="email" class="form-control" id="email" placeholder="E-mail" aria-describedby="inputGroupPrependEmail" name="email"
+                    required>
+                  <div class="invalid-feedback">
+                    Por favor escolha um e-mail válido!
                   </div>
                 </div>
-                <div class="form-row">
-                  <div class="col-md-6">
-                    <label for="address">Endereço</label>
-                    <input type="text" class="form-control" id="address" placeholder="Digite o endereço" name="info-address">
-                    <!-- <div class="invalid-feedback">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col-md-6">
+                <label for="address">Endereço</label>
+                <input type="text" class="form-control" id="address" placeholder="Digite o endereço" name="info-address">
+                <!-- <div class="invalid-feedback">
                           Please provide a valid city.
                         </div> -->
-                  </div>
-                  <div class="col-md-3 ">
-                    <label for="company">Empresa</label>
-                    <input type="text" class="form-control" id="company" placeholder="Digite o nome da empresa" name="info-company">
-                    <!-- <div class="invalid-feedback">
+              </div>
+              <div class="col-md-3 ">
+                <label for="company">Empresa</label>
+                <input type="text" class="form-control" id="company" placeholder="Digite o nome da empresa" name="info-company">
+                <!-- <div class="invalid-feedback">
                           Please provide a valid state.
                         </div> -->
-                  </div>
-                  <div class="col-md-3 ">
-                    <label for="phone">Telefone</label>
-                    <input type="text" class="form-control" id="phone" placeholder="Telefone" name="info-phone">
-                    <!-- <div class="invalid-feedback">
+              </div>
+              <div class="col-md-3 ">
+                <label for="phone">Telefone</label>
+                <input type="text" class="form-control" id="phone" placeholder="Telefone" name="info-phone">
+                <!-- <div class="invalid-feedback">
                           Please provide a valid zip.
                         </div> -->
-                  </div>
-                  <div class="col-md-12 ">
-                    <label for="avatar">Imagem</label>
-                    <input type="url" class="form-control" id="avatar" placeholder="http://....." name="info-avatar">
-                    <!-- <div class="invalid-feedback">
+              </div>
+              <div class="col-md-12 ">
+                <label for="avatar">Imagem</label>
+                <input type="url" class="form-control" id="avatar" placeholder="http://....." name="info-avatar">
+                <!-- <div class="invalid-feedback">
                           Please provide a valid zip.
                         </div> -->
-                  </div>
-                  <div class="col-md-12 ">
-                    <label for="comments">Comentários</label>
-                    <textarea type="text" class="form-control" id="comments" placeholder="Comentários" name="info-comments"></textarea>
-                    <!-- <div class="invalid-feedback">
+              </div>
+              <div class="col-md-12 ">
+                <label for="comments">Comentários</label>
+                <textarea type="text" class="form-control" id="comments" placeholder="Comentários" name="info-comments"></textarea>
+                <!-- <div class="invalid-feedback">
                           Please provide a valid zip.
                         </div> -->
-                  </div>
-                </div>
-                <div class="form-group p-2">
-                  <span>Sexo
-                    <b class="text-danger">*</b>
-                  </span>
-                  <div class="custom-control custom-radio">
-                    <input type="radio" class="custom-control-input" id="gender-female" name="gender" value="f" required>
-                    <label class="custom-control-label" for="gender-female">
-                      Mulher
-                    </label>
-                  </div>
-                  <div class="custom-control custom-radio mb-3">
-                    <input type="radio" class="custom-control-input" id="gender-male" name="gender" value="m" required>
-                    <label class="custom-control-label" for="gender-male">
-                      Homem
-                    </label>
-                    <div class="invalid-feedback">Por favor selecione o sexo!</div>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <button class="btn btn-primary d-flex mr-2 text-uppercase" type="submit">Submit form
-                    <i class="material-icons ml-1">done</i>
-                  </button>
-                  <button class="btn btn-danger d-flex mr-2 text-uppercase" type="reset" id="contact-new-close-button">LIMPAR
-                    <i class="material-icons ml-1">delete</i>
-                  </button>
-                  <button class="btn btn-outline-secondary d-flex text-uppercase" type="button" id="contact-new-favorite-button">FAVORITO
-                    <i class="material-icons ml-1">star_border</i>
-                  </button>
-                </div>
-              </form>
-      
+              </div>
             </div>
-            <!-- CONTACTS LIST -->
-            <div class="contacts-list row">
-      
+            <div class="form-group p-2">
+              <span>Sexo
+                <b class="text-danger">*</b>
+              </span>
+              <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="gender-female" name="gender" value="f" required>
+                <label class="custom-control-label" for="gender-female">
+                  Mulher
+                </label>
+              </div>
+              <div class="custom-control custom-radio mb-3">
+                <input type="radio" class="custom-control-input" id="gender-male" name="gender" value="m" required>
+                <label class="custom-control-label" for="gender-male">
+                  Homem
+                </label>
+                <div class="invalid-feedback">Por favor selecione o sexo!</div>
+              </div>
             </div>
-          </div>
+            <div class="form-row">
+              <button class="btn btn-primary d-flex mr-2 text-uppercase" type="submit">Submit form
+                <i class="material-icons ml-1">done</i>
+              </button>
+              <button class="btn btn-danger d-flex mr-2 text-uppercase" type="reset" id="contact-new-close-button">LIMPAR
+                <i class="material-icons ml-1">delete</i>
+              </button>
+              <button class="btn btn-outline-secondary d-flex text-uppercase" type="button" id="contact-new-favorite-button">FAVORITO
+                <i class="material-icons ml-1">star_border</i>
+              </button>
+            </div>
+          </form>
+
+        </div>
+        <!-- CONTACTS LIST -->
+        <div class="contacts-list row"></div>
+        <!-- PAGE LOADER -->
+        <div class="la-ball-clip-rotate la-primary la-2x mx-auto mt-5" id="page-loader" style="display: none">
+          <div></div>
+        </div>
+      </div>
     </div>
 
     <script src="dist/main.build.js"></script>

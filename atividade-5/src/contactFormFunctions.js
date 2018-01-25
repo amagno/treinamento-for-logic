@@ -2,13 +2,13 @@ export const defaultAvatarLink = 'http://fieldandstreams.com/wp-content/themes/t
 export const closeForm = (button, form) => {
   button.removeClass(['active', 'btn-outline-danger']);
   button.addClass('btn-outline-primary');
-  button.html('Novo Contato<i class="material-icons ml-1">person_add</i>');
+  button.html('<i class="material-icons ml-1">person_add</i>');
   form.fadeOut(100);
 };
 export const openForm = (button, form) => {
   button.removeClass('btn-outline-primary');
   button.addClass(['active', 'btn-outline-danger']);
-  button.html('Cancelar<i class="material-icons ml-1">cancel</i>');
+  button.html('<i class="material-icons ml-1">cancel</i>');
   form.fadeIn(300);
 };
 export const favoriteUnchecked = (button, checkbox) => {

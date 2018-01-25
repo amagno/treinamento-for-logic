@@ -1,14 +1,13 @@
 import jquery from 'jquery';
 import { openForm, setContactInputValues } from './contactFormFunctions';
 import { makeContactsHtml } from './contactHTML';
+import { modalContactDelete } from './contactModal';
 import { formOptionsDefault } from './contactForm';
 import { store, deleteContact } from './contactStore';
 
 const urlApi = 'http://localhost:3000/v1/contacts';;
 const $contactsListContainer = $('.contacts-list');
-export const contactDefaultSelctors = {
 
-};
 export const contactListOptionsDefault = {
   contactsListContainer: $contactsListContainer,
   form: formOptionsDefault.form,
@@ -39,10 +38,13 @@ export const collapseContactToggle = (collapseContactButton, $ = jquery) => {
 // DELETE CONTACT
 export const deleteContactBt = (deleteContactButton, url) => {
     deleteContactButton.click(function(event) {
-    // console.log(this.dataset.target);
+    console.log('Delete: ', this.dataset.target);
     event.preventDefault();
     const id = this.dataset.target;
-    deleteContact(id, url);
+    const contact = store.findContactById(id);
+    modalContactDelete(contact, () => {
+      deleteContact(id, url);
+    });
   });
 };
 

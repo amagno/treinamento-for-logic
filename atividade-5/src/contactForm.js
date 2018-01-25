@@ -7,11 +7,12 @@ import {
   favoriteUnchecked, 
   makeDataForPost 
 } from './contactFormFunctions';
-import { createContact, updateContact } from './contactStore';
+import { createContact, updateContact, store } from './contactStore';
+import { modalContactUpdate } from './contactModal';
 
 const urlApi = 'http://localhost:3000/v1/contacts';
 const $form = $('#contact-new-form');
-const $buttonForm = $('#contact-new-button').html('Novo Contato<i class="material-icons ml-1">person_add</i>');
+const $buttonForm = $('#contact-new-button');
 const $favoriteFormButton = $('#contact-new-favorite-button');
 const $favoriteCheckbox = $('#contact-new-favorite-checkbox');
 
@@ -69,15 +70,20 @@ export const initFormSubmit = (options = formOptionsDefault) => {
     if (formHTMLElement.dataset.formType === 'new') {
       const postData = makeDataForPost(Array.from(form.serializeArray()));      
       createContact(postData, url);
+      submitDone(form, buttonForm, favoriteFormButton, favoriteCheckbox);
     }
     if (formHTMLElement.dataset.formType === 'update') {
       const postData = makeDataForPost(Array.from(form.serializeArray()));      
       const id = formHTMLElement.dataset.updateId;
       if (id) {
-        updateContact(postData, id);
+        console.log('Open modal update for', id);
+        modalContactUpdate(store.findContactById(id), () => {
+          updateContact(postData, id);
+          submitDone(form, buttonForm, favoriteFormButton, favoriteCheckbox);
+        });
       }
     }
-    submitDone(form, buttonForm, favoriteFormButton, favoriteCheckbox);
+    
   });
   return form;
 };

@@ -1,5 +1,5 @@
 export const contactItem = (contact) => `
-<div class="col-12 col-md-6 col-xl-4 mt-1 mb-1 contact-card" id=contact-${contact._id} data-name="${contact.firstName}">
+<div class="col-12 col-md-6 col-xl-4 mt-1 mb-1 contact-card" id="contact-${contact._id}" data-name="${contact.firstName}">
   <div class="card">
   <div class="card-header d-flex h-100" style="min-height: 100px;">
     <img class="rounded w-25 h-25 mr-3" src="${contact.info.avatar}" alt="${contact.firstName}" style="min-width: 50px; min-height: 50px;">

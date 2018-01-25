@@ -1,4 +1,5 @@
 @import "~bootstrap/scss/bootstrap";
+@import "variables";
 /*!
  * Load Awesome v1.1.0 (http://github.danielcardoso.net/load-awesome/)
  * Copyright 2015 Daniel Cardoso <@DanielCardoso>
@@ -16,6 +17,9 @@
      display: block;
      font-size: 0;
      color: #fff;
+ }
+ .la-ball-clip-rotate.la-primary {
+     color: $blue;
  }
  .la-ball-clip-rotate.la-dark {
      color: #333;
