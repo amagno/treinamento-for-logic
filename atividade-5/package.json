@@ -7,7 +7,8 @@
     "dev": "run-p dev:*",
     "dev:api": "(cd api && yarn start)",
     "dev:client": "webpack-dev-server --inline --hot --open",
-    "build": "webpack"
+    "build": "webpack",
+    "postinstall": "git clone https://github.com/amagno/simple-api.git api"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.38",
