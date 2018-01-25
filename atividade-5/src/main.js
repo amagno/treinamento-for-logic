@@ -1,19 +1,25 @@
+import $ from 'jquery';
 import './styles.scss';
 
-import { fetchContacts, makeContactsList } from './contactsList';
-import { initFormContactToggle } from './newContactForm';
+import { makeContactsList } from './contactsList';
+import { initFormSubmit } from './contactForm';
+import { fetchAllContacts } from './contactStore';
+import { store } from './contactStore';
 
 
 $(document).ready(() => {
-  fetchContacts();
+  initFormSubmit();
+  fetchAllContacts();
+
   window.addEventListener('contacts-fetch', (event) => {
     console.log('Contacts fetched!', event);
-    makeContactsList(window.__CONTACTS__STORE__, $('.contacts-list'));
+    makeContactsList(store.getStore());
   });
-  window.addEventListener('open-form-update', () => {
-    formElement[0].dataset.formType = 'update';
-    openForm(newButton, formElement);
-  });
+  
+  // window.addEventListener('open-form-update', () => {
+  //   formElement[0].dataset.formType = 'update';
+  //   openForm(newButton, formElement);
+  // });
   // fetchAndMakeContactsList();
-  initFormContactToggle();
+  // initFormContactToggle();
 });
