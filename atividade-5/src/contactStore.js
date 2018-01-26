@@ -2,7 +2,7 @@ import jquery from 'jquery';
 // import { defaultAvatarLink } from './contactFormFunctions';
 
 const urlApi = 'http://localhost:3000/v1/contacts';
-
+const loadingDelay = 1000;
 export const sanitizeContactsData = (contacts = []) => {
   return contacts.map(contact => {
     if (contact.isFavorite === 'false') {
@@ -37,6 +37,9 @@ export const store = {
   removeContactById: (id) => {
     return store.getStore().filter(contact => contact._id !== id);
   },
+  getPaginationInfo: () => {
+    return window.__CONTACTS__STORE__PAGINATION__;
+  },
   setStore: (data) => {
     window.__CONTACTS__STORE__ = data;    
   },
@@ -58,15 +61,12 @@ export const store = {
 export const fetchAllContacts = (url = urlApi, $ = jquery) => {
   $.get(url)
     .done(response => {
-      const data = sanitizeContactsData([
-        ...store.getStore(),
-        ...response
-      ]);
+      const data = sanitizeContactsData(response);
       console.log('fetch: ', data);
       store.dispatch('contacts-loading-show');
       store.setStore(data);
       store.dispatch('contacts-fetch');
-      store.dispatch('contacts-loading-hide');
+      setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);      
     })
     .catch(error => console.error(error));
     
@@ -83,7 +83,7 @@ export const createContact = (contact, url = urlApi, $ = jquery) => {
       store.dispatch('contacts-loading-show');
       store.setStore(data);
       store.dispatch('contacts-fetch');
-      store.dispatch('contacts-loading-hide');
+      setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);      
     })
     .catch(error => console.log(error));
 };
@@ -122,7 +122,7 @@ export const deleteContact = (id, url = urlApi, $ = jquery) => {
         store.dispatch('contacts-loading-show');
         store.setStore(data);
         store.dispatch('contacts-fetch');
-        store.dispatch('contacts-loading-hide');
+        setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);
       })
       .catch(error => console.log(error));
 };
@@ -133,7 +133,7 @@ export const handleFilterChange = (filter) => {
   store.dispatch('contacts-loading-show');
   store.setFilter(filter);
   store.dispatch('contacts-fetch');
-  store.dispatch('contacts-loading-hide');
+  setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);
 };
 export const handleSearch = (field, value, url = urlApi, $ = jquery) => {
   const sU = `${url}?${field}=${value}`;
@@ -141,13 +141,12 @@ export const handleSearch = (field, value, url = urlApi, $ = jquery) => {
   $.get(sU)
     .done(response => {
       console.log('Send reqeust search');
-      const data = sanitizeContactsData([
-        ...response
-      ]);
+      const data = sanitizeContactsData(response);
       console.log(data);
 
       store.setStore(data);
       store.dispatch('contacts-fetch');
+      store.dispatch('contacts-loading-hide');
     })
     .catch(error => console.error(error));
 };

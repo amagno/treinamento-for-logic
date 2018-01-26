@@ -23,6 +23,9 @@ export const contactItem = (contact) => `
 </div>
 `;
 export const makeContactsHtml = (contacts = []) => {
+  if (!contacts.length) {
+    return '<h2>Não à contatos para exibir...</h2>';
+  }
   let html = '';
   contacts.forEach(contact => {
     html += contactItem(contact);

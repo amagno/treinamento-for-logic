@@ -74,6 +74,7 @@ export const makeContactsList = (contacts = [], options = contactListOptionsDefa
     favoriteCheckbox,
     url
   } = options;
+  // build html list 
   const cotactsList = contactsListContainer.html(makeContactsHtml(contacts));
   const $collapseContactButton = $('.collapse-contact-button');
   const $editContactButton = $('.edit-contact-button');

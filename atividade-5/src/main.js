@@ -36,11 +36,10 @@ $(document).ready(() => {
   window.addEventListener('contacts-loading-hide', event => {
     event.preventDefault();
     console.log('contacts-loading-hide event');
-    setTimeout(() => {
-      const pageLoader = $('#page-loader');
-      const container = contactListOptionsDefault.contactsListContainer;
-      pageLoader.hide();
-      container.fadeIn(500);
-    }, 1000);
+
+    const pageLoader = $('#page-loader');
+    const container = contactListOptionsDefault.contactsListContainer;
+    pageLoader.hide();
+    container.fadeIn(500);
   });
 });
