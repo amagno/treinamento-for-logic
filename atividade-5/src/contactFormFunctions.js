@@ -2,12 +2,14 @@ export const defaultAvatarLink = 'http://fieldandstreams.com/wp-content/themes/t
 export const closeForm = (button, form) => {
   button.removeClass(['active', 'btn-outline-danger']);
   button.addClass('btn-outline-primary');
+  button[0].dataset.originalTitle = 'Novo contato';
   button.html('<i class="material-icons ml-1">person_add</i>');
   form.fadeOut(100);
 };
 export const openForm = (button, form) => {
   button.removeClass('btn-outline-primary');
   button.addClass(['active', 'btn-outline-danger']);
+  button[0].dataset.originalTitle = 'Fechar formulário';
   button.html('<i class="material-icons ml-1">cancel</i>');
   form.fadeIn(300);
 };

@@ -2,8 +2,9 @@ import $ from 'jquery';
 import { makeContactsList, contactListOptionsDefault } from './contactsList';
 import { initFormSubmit } from './contactForm';
 import { fetchAllContacts } from './contactStore';
-import { store } from './contactStore';
 import { initSearchForm } from './contactSearchForm';
+import { initContactsPagination, makePaginationButtons } from './contactsPagination';
+import { store, numberOfPages, initStore } from './contactStore';
 
 import './styles.scss';
 import 'bootstrap';
@@ -14,16 +15,29 @@ import 'bootstrap';
 // window.Util = Util;
 
 $(document).ready(() => {
+  initStore();
   initFormSubmit();
   initSearchForm();  
-  fetchAllContacts();
+  initContactsPagination();
   // Bootstrap tooltip
   $('[data-tooltip="true"]').tooltip();
-  // contacts fetch event
+
+
+
+
+  // EVENTS
   window.addEventListener('contacts-fetch', event => {
     event.preventDefault();
-    console.log('contacts-fetch event', store.getStore());
-    makeContactsList(store.getStore());
+    const contacts = store.getStore();
+    // console.log('contacts-fetch event', contacts);
+    // const limit = store.getPaginationInfo().limit;
+    // console.log('limit of contacts ', limit);
+    // const pages = numberOfPages(limit, contacts);
+    const { page, pages } = store.getPaginationInfo();
+    // console.log('number of pages ', pages);
+    makePaginationButtons(pages, page);
+    console.log('PAGINATION INFO: ', store.getPaginationInfo());
+    makeContactsList(contacts);
   });
   window.addEventListener('contacts-loading-show', event => {
     event.preventDefault();

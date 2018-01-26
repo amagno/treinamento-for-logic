@@ -13,9 +13,7 @@
     window.__CONTACTS__STORE__FILTER__ = 'firstName';
     window.__CONTACTS__STORE__PAGINATION__ = {
       page: 1,
-      pages: 0,
-      limit: 10,
-      total: 0
+      limit: 10
     };
   </script>
 </head>
@@ -63,8 +61,8 @@
             <!-- BUTTON CONTACT ADD -->
             <div class=" col-2 col-md-1 col-xl-1">
               <div class="btn-group">
-                <button class="btn btn-outline-primary d-flex text-uppercase pr-3" id="contact-favorite-only-button" data-tooltip="true"
-                  data-placement="top" title="Apenas Favoritos">
+                <button class="btn btn-outline-primary d-flex text-uppercase pr-3" id="contact-favorite-only-button" data-tooltip="true" data-placement="top"
+                  title="Apenas Favoritos">
                   <i class="material-icons ml-1">star</i>
                 </button>
                 <button class="btn btn-outline-primary d-flex text-uppercase pr-3" id="contact-new-button" data-tooltip="true" data-placement="top"
@@ -195,42 +193,45 @@
           </form>
 
         </div>
-        <!-- PAGINATION -->
-        <div class="row contacts-list-pagination align-items-center justify-content-between">
-          <!-- PAGE LIMIT -->
+        <div class="contacts-list-pagination d-flex align-items-center justify-content-between">
+          <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <button type="button" class="btn btn-primary btn-sm font-weight-bold disabled">Exibindo por página</button>
 
-          <div class="input-group col-3">
-            <div class="input-group-prepend">
-              <button class="btn btn-secondary disabled" type="button" >
-                Exibindo por página
+            <div class="btn-group" role="group">
+              <button id="contacts-page-limit-button" type="button" class="btn btn-outline-secondary dropdown-toggle btn-sm font-weight-bold"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                10
               </button>
-            </div>
-            <select class="custom-select text-align-center" id="contacts-page-limit-select" data-tooltip="true" data-placement="top" title="Limite por página">
-              <option value="10" selected>10</option>
-              <option value="20">20</option>
-              <option value="30">30</option>
-              <option value="40">40</option>
-              <option value="50">50</option>
-            </select>
-          </div>
-          <div class="col-9">
-            <ul class="pagination justify-content-end pt-3 ">
-              <li class="page-item ">
-                <a class="btn btn-outline-secondary font-weight-bold d-flex" href="#" style="border-radius: 0.25rem 0 0 0.25rem;">
-                  <i class="material-icons ">navigate_before</i>
-                </a>
-              </li>
-              <div class="d-flex" id="contacts-pagination-buttons">
-                 
+              <div class="dropdown-menu contacts-page-limit-dropdown" aria-labelledby="contacts-page-limit">
+                <a class="dropdown-item contacts-page-limit-item" href="#">20</a>
+                <a class="dropdown-item contacts-page-limit-item" href="#">30</a>
+                <a class="dropdown-item contacts-page-limit-item" href="#">40</a>
+                <a class="dropdown-item contacts-page-limit-item" href="#">50</a>
               </div>
-
-              <li class="page-item ">
-                <a class="btn btn-outline-secondary font-weight-bold d-flex" href="#" style="border-radius: 0 0.25rem 0.25rem 0;">
-                  <i class="material-icons ">navigate_next</i>
-                </a>
-              </li>
-            </ul>
+            </div>
           </div>
+
+          <ul class="pagination pagination-sm justify-content-center pt-3 ">
+            <li class="page-item ">
+              <a class="btn btn-primary btn-sm font-weight-bold d-flex" href="#" style="border-radius: 0.25rem 0 0 0.25rem; padding: 2.5px;">
+                <i class="material-icons ">navigate_before</i>
+              </a>
+            </li>
+            <li class="page-item">
+              <a class="btn btn-outline-secondary btn-sm rounded-0 font-weight-bold active" href="#">1</a>
+            </li>
+            <li class="page-item ">
+              <a class="btn btn-outline-secondary btn-sm rounded-0 font-weight-bold" href="#">2</a>
+            </li>
+            <li class="page-item ">
+              <a class="btn btn-outline-secondary btn-sm rounded-0 font-weight-bold" href="#">3</a>
+            </li>
+            <li class="page-item ">
+              <a class="btn btn-primary btn-sm font-weight-bold d-flex" href="#" style="border-radius: 0 0.25rem 0.25rem 0; padding: 2.5px;">
+                <i class="material-icons ">navigate_next</i>
+              </a>
+            </li>
+          </ul>
 
         </div>
         <!-- CONTACTS LIST -->

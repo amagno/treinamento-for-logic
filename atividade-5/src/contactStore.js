@@ -3,6 +3,9 @@ import jquery from 'jquery';
 
 const urlApi = 'http://localhost:3000/v1/contacts';
 const loadingDelay = 1000;
+export const numberOfPages = (limit, contacts = []) => {
+  return parseInt(contacts.length / limit);
+};
 export const sanitizeContactsData = (contacts = []) => {
   return contacts.map(contact => {
     if (contact.isFavorite === 'false') {
@@ -40,6 +43,9 @@ export const store = {
   getPaginationInfo: () => {
     return window.__CONTACTS__STORE__PAGINATION__;
   },
+  setPaginationInfo: (data) => {
+    window.__CONTACTS__STORE__PAGINATION__ = data;
+  },
   setStore: (data) => {
     window.__CONTACTS__STORE__ = data;    
   },
@@ -59,7 +65,12 @@ export const store = {
   }
 };
 export const fetchAllContacts = (url = urlApi, $ = jquery) => {
-  $.get(url)
+  const page = store.getPaginationInfo().page;
+  const pageLimit = store.getPaginationInfo().limit;
+  console.log('get pagination info:', store.getPaginationInfo());
+  const mainUrl = `${url}?limit=${pageLimit}&page=${page}`;
+  console.log(mainUrl);
+  $.get(mainUrl)
     .done(response => {
       const data = sanitizeContactsData(response);
       console.log('fetch: ', data);
@@ -71,6 +82,26 @@ export const fetchAllContacts = (url = urlApi, $ = jquery) => {
     .catch(error => console.error(error));
     
 };
+export const initStore = (url = urlApi, $ = jquery) => {
+  $.get(url)
+    .done(response => {
+      console.log('init store: ', response);
+      const contacts = sanitizeContactsData(response);
+      const pages = numberOfPages(store.getPaginationInfo().limit, contacts);
+      console.log('PAGES: ', pages);
+      const paginationInfo = {
+        ...store.getPaginationInfo(),
+        pages,
+        total: contacts.length
+      };
+      console.log('init pagination info: ', paginationInfo);
+      store.setPaginationInfo(paginationInfo);
+      fetchAllContacts();
+    })
+    .catch(error => console.error(error));
+};
+
+
 export const createContact = (contact, url = urlApi, $ = jquery) => {
   $.post(url, contact)
     .done((response) => {
@@ -149,4 +180,21 @@ export const handleSearch = (field, value, url = urlApi, $ = jquery) => {
       store.dispatch('contacts-loading-hide');
     })
     .catch(error => console.error(error));
+};
+export const favoriteOnly = () => {
+  const data = store.getStore().filter(contact => contact.isFavorite === true);
+  store.dispatch('contacts-loading-show');
+  store.setStore(data);
+  store.dispatch('contacts-fetch');
+  setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);
+};
+export const handlePageLimitChange = (limit) => {
+  const data = {
+    ...store.getPaginationInfo(),
+    limit: limit,
+    pages: numberOfPages(limit, store.getPaginationInfo().total)
+  };
+  console.log('set pagination info: ', data);
+  store.setPaginationInfo(data);
+  fetchAllContacts();
 };
