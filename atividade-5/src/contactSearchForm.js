@@ -18,11 +18,20 @@ export const initSearchForm = (options = searchFormDefaultOptions) => {
     event.preventDefault();
     if (options.contactFavoriteOnlyButton.hasClass('active')) {
       options.contactFavoriteOnlyButton.removeClass('active');
-      fetchAllContacts();
+      // fetchAllContacts();
+      favoriteOnly(false);
       return;
+      // if (options.contactSearchInput.val()) {
+      //   favoriteOnly(false);        
+      //   handleSearch(fieldSearch, options.contactSearchInput.val());
+      //   return;
+      // }
+      // favoriteOnly(false);      
+      // fetchAllContacts();
+      // return;
     }
     options.contactFavoriteOnlyButton.addClass('active');
-    favoriteOnly();
+    favoriteOnly(true);
   });
   // Serach input keyupeventhandler
   options.contactSearchInput.keyup(event => {

@@ -67,6 +67,7 @@ export const modalContactUpdate = (contact, callback, $ = jquery) => {
     event.preventDefault();
     callback();
     $(`#modal-update-contact-${contact._id}`).modal('hide');
+    window.scrollTo(0, 0);
     setTimeout(() => $(`#modal-update-contact-${contact._id}`).remove(), 1000);
   });
 };

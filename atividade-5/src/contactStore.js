@@ -1,36 +1,67 @@
 import jquery from 'jquery';
-// import { defaultAvatarLink } from './contactFormFunctions';
+import { sanitizeContactsData, numberOfPages, filterContacts } from './utils';
 
 const urlApi = 'http://localhost:3000/v1/contacts';
 const loadingDelay = 1000;
-export const numberOfPages = (limit, contacts = []) => {
-  return parseInt(contacts.length / limit);
-};
-export const sanitizeContactsData = (contacts = []) => {
-  return contacts.map(contact => {
-    if (contact.isFavorite === 'false') {
-      contact.isFavorite = false;
-    }
-    if (contact.isFavorite === 'true') {
-      contact.isFavorite = true;
-    }
-    return {
-      _id: contact._id,
-      firstName: contact.firstName.toLowerCase(),
-      lastName: contact.lastName.toLowerCase(),
-      email: contact.email.toLowerCase(),
-      isFavorite: contact.isFavorite,
-      gender: contact.gender.toLowerCase(),
-      info: contact.info
-    };
-  });
-};
-export const filterContacts = (key, data = []) => {
-  return data.sort((a, b) => {
-    return a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0;
-  });
-};
+
 export const store = {
+  getIsFavorite: () => {
+    return window.__CONTACTS__STORE__IS_FAVORITE__;
+  },
+  setIsFavorite: (boolean) => {
+    window.__CONTACTS__STORE__IS_FAVORITE__ = boolean;
+  },
+  setFilter: (filter) => {
+    window.__CONTACTS__STORE__FILTER__ = filter;
+  },
+  getFilter: () => {
+    return window.__CONTACTS__STORE__FILTER__;
+  },
+  getPaginationInfo: () => {
+    return window.__CONTACTS__STORE__PAGINATION__;
+  },
+  setPaginationInfo: (data = {}, contacts = store.getStore(), paginationInfo = store.getPaginationInfo()) => {
+    console.log(paginationInfo);
+    const limit = data.limit || paginationInfo.limit;
+    const total = data.total || contacts.length;
+    const pages = data.pages || numberOfPages(total, limit);
+    const page = data.page || paginationInfo.page;
+    window.__CONTACTS__STORE__PAGINATION__ = {
+      page: page > pages ? pages : page,
+      pages,
+      limit,
+      total
+    };
+  },
+  setStore: (data) => {
+    window.__CONTACTS__STORE__ = data; 
+  },
+  getStore: () => {
+    const store = window.__CONTACTS__STORE__;
+    const filter = window.__CONTACTS__STORE__FILTER__;
+    const isFavorite = window.__CONTACTS__STORE__IS_FAVORITE__;
+    const clone = Object.assign([], store);
+    if(isFavorite) { 
+      return filterContacts(filter, clone.filter(c => c.isFavorite === true));
+    };
+    return filterContacts(filter, store);
+    // return window.__CONTACTS__STORE__;
+  },
+  getContactsPages: () => {
+    const clone = Array.from(store.getStore());
+    const pages = store.getPaginationInfo().pages;
+    const limit = store.getPaginationInfo().limit;
+    const data = [];
+    for (let i = 0; i < clone.length; i += limit) {
+      data.push(clone.slice(i, i + limit));
+    }
+    console.log('DATA  ----> ', data);    
+    console.log('CLONE ----> ', clone); 
+    console.log('PAGES ----> ', pages);
+    console.log('LIMIT ----> ', limit);
+    return data;
+    
+  },
   findContactById: (id) => {
     return store.getStore().find(contact => contact._id === id);
   },
@@ -40,69 +71,27 @@ export const store = {
   removeContactById: (id) => {
     return store.getStore().filter(contact => contact._id !== id);
   },
-  getPaginationInfo: () => {
-    return window.__CONTACTS__STORE__PAGINATION__;
-  },
-  setPaginationInfo: (data) => {
-    window.__CONTACTS__STORE__PAGINATION__ = data;
-  },
-  setStore: (data) => {
-    window.__CONTACTS__STORE__ = data;    
-  },
-  getStore: () => {
-    return filterContacts(window.__CONTACTS__STORE__FILTER__, window.__CONTACTS__STORE__);
-    // return window.__CONTACTS__STORE__;
-  },
-  setFilter: (filter) => {
-    window.__CONTACTS__STORE__FILTER__ = filter;
-  },
-  getFilter: () => {
-    return window.__CONTACTS__STORE__FILTER__;
-  },
   dispatch: (eventString) => {
     const fetchEvent = new Event(eventString);
     window.dispatchEvent(fetchEvent);
   }
 };
+// Fetch all contacts
 export const fetchAllContacts = (url = urlApi, $ = jquery) => {
-  const page = store.getPaginationInfo().page;
-  const pageLimit = store.getPaginationInfo().limit;
-  console.log('get pagination info:', store.getPaginationInfo());
-  const mainUrl = `${url}?limit=${pageLimit}&page=${page}`;
-  console.log(mainUrl);
-  $.get(mainUrl)
+  store.dispatch('contacts-loading-show');  
+  $.get(url)
     .done(response => {
       const data = sanitizeContactsData(response);
-      console.log('fetch: ', data);
-      store.dispatch('contacts-loading-show');
+      store.setPaginationInfo({}, data);
       store.setStore(data);
       store.dispatch('contacts-fetch');
       setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);      
     })
     .catch(error => console.error(error));
-    
 };
-export const initStore = (url = urlApi, $ = jquery) => {
-  $.get(url)
-    .done(response => {
-      console.log('init store: ', response);
-      const contacts = sanitizeContactsData(response);
-      const pages = numberOfPages(store.getPaginationInfo().limit, contacts);
-      console.log('PAGES: ', pages);
-      const paginationInfo = {
-        ...store.getPaginationInfo(),
-        pages,
-        total: contacts.length
-      };
-      console.log('init pagination info: ', paginationInfo);
-      store.setPaginationInfo(paginationInfo);
-      fetchAllContacts();
-    })
-    .catch(error => console.error(error));
-};
-
-
+// Create contacts
 export const createContact = (contact, url = urlApi, $ = jquery) => {
+  store.dispatch('contacts-loading-show');  
   $.post(url, contact)
     .done((response) => {
       contact._id = response;
@@ -110,8 +99,7 @@ export const createContact = (contact, url = urlApi, $ = jquery) => {
         ...store.getStore(),
         contact
       ]);
-      console.log('created: ', data);
-      store.dispatch('contacts-loading-show');
+      store.setPaginationInfo({}, data);
       store.setStore(data);
       store.dispatch('contacts-fetch');
       setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);      
@@ -121,11 +109,7 @@ export const createContact = (contact, url = urlApi, $ = jquery) => {
 // go finish implement
 export const updateContact = (contactAttributes, id) => {
   const storeContact = store.findContactById(id);
-  // contactAttributes.info.avatar = contactAttributes.info.avatar === defaultAvatarLink && storeContact.info.avatar
-  // ? storeContact.info.avatar
-  // : contactAttributes.info.avatar;
   if (!storeContact) throw new Error(`contact: ${id} not found on store`);
-
   const contact = {
     ...storeContact,
     ...contactAttributes,  
@@ -140,23 +124,25 @@ export const updateContact = (contactAttributes, id) => {
   store.setStore(data);
   store.dispatch('contacts-fetch');
 };
+// Delete contacts
 export const deleteContact = (id, url = urlApi, $ = jquery) => {
   if (!id) throw new Error('_id is not defined for delete!');
+    store.dispatch('contacts-loading-show');    
     $.ajax({
       method: 'DELETE',
       url: `${url}/${id}`
     })
       .done(response => {
         console.log(response);
-        // console.log(store.removeContactById(id));
         const data = sanitizeContactsData(store.removeContactById(id));
-        store.dispatch('contacts-loading-show');
+        store.setPaginationInfo({}, data);
         store.setStore(data);
         store.dispatch('contacts-fetch');
         setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);
       })
       .catch(error => console.log(error));
 };
+// Order change
 export const handleFilterChange = (filter) => {
   if (filter !== 'firstName' && filter !== 'lastName' && filter !== 'email') {
     throw new Error(`Filter: ${filter} is invalid!`);
@@ -166,35 +152,46 @@ export const handleFilterChange = (filter) => {
   store.dispatch('contacts-fetch');
   setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);
 };
+// Handle search input
 export const handleSearch = (field, value, url = urlApi, $ = jquery) => {
+  store.dispatch('contacts-loading-show');  
   const sU = `${url}?${field}=${value}`;
   console.log(sU);
   $.get(sU)
     .done(response => {
-      console.log('Send reqeust search');
       const data = sanitizeContactsData(response);
-      console.log(data);
-
+      store.setPaginationInfo({}, data);
       store.setStore(data);
       store.dispatch('contacts-fetch');
       store.dispatch('contacts-loading-hide');
     })
     .catch(error => console.error(error));
 };
-export const favoriteOnly = () => {
-  const data = store.getStore().filter(contact => contact.isFavorite === true);
+// Favorite only contacts
+export const favoriteOnly = (state) => {
   store.dispatch('contacts-loading-show');
-  store.setStore(data);
+  // const data = store.getStore().filter(contact => contact.isFavorite === true);
+  // store.setStore(data);
+  // store.setPaginationInfo({}, data);
+  // const isFavorite = store.getIsFavorite();
+  store.setIsFavorite(state);
+  store.setPaginationInfo({});
   store.dispatch('contacts-fetch');
   setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);
 };
+// Page limit change
 export const handlePageLimitChange = (limit) => {
-  const data = {
-    ...store.getPaginationInfo(),
-    limit: limit,
-    pages: numberOfPages(limit, store.getPaginationInfo().total)
-  };
-  console.log('set pagination info: ', data);
-  store.setPaginationInfo(data);
-  fetchAllContacts();
+  store.dispatch('contacts-loading-show');
+  store.setPaginationInfo({ limit });
+  console.log('set pagination info: ', store.getPaginationInfo());  
+  store.dispatch('contacts-fetch');
+  setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);  
+};
+// Page change
+export const handlePageChange = (page) => {
+  store.dispatch('contacts-loading-show');  
+  store.setPaginationInfo({ page });
+  console.log('Change page info: ', store.getPaginationInfo());  
+  store.dispatch('contacts-fetch');
+  setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);  
 };

@@ -10,6 +10,7 @@
   <title>Document</title>
   <script>
     window.__CONTACTS__STORE__ = [];
+    window.__CONTACTS__STORE__IS_FAVORITE__ = false;    
     window.__CONTACTS__STORE__FILTER__ = 'firstName';
     window.__CONTACTS__STORE__PAGINATION__ = {
       page: 1,
@@ -29,7 +30,7 @@
         <div class="card contacts-form mt-2 mb-2 row pr-3 pt-3 pl-3 pb-2">
           <div class="row conacts-serach">
             <!-- Search input -->
-            <div class="input-group mb-3 col-12 col-md-6 col-xl-6">
+            <div class="input-group mb-3 col-12 col-xl-6">
               <!-- SEARCH FROM -->
               <div class="input-group-prepend">
                 <button class="btn btn-outline-secondary d-flex" type="button" id="contact-search-input-button">
@@ -48,7 +49,7 @@
               </div>
             </div>
             <!-- Button Form Contact -->
-            <div class="input-group mb-3 col-6 col-md-3 col-xl-3">
+            <div class="input-group mb-3 col-12 col-xl-3">
               <div class="input-group-prepend">
                 <button class="btn btn-outline-secondary d-flex" type="button" id="contacts-filter-order-button">
                   <i class="material-icons">sort</i>
@@ -61,7 +62,7 @@
               </select>
             </div>
             <!-- BUTTON CONTACT ADD -->
-            <div class=" col-2 col-md-1 col-xl-1">
+            <div class="col-12 col-xl-1 d-flex justify-content-center d-xl-block">
               <div class="btn-group">
                 <button class="btn btn-outline-primary d-flex text-uppercase pr-3" id="contact-favorite-only-button" data-tooltip="true"
                   data-placement="top" title="Apenas Favoritos">
@@ -70,6 +71,11 @@
                 <button class="btn btn-outline-primary d-flex text-uppercase pr-3" id="contact-new-button" data-tooltip="true" data-placement="top"
                   title="Novo contato">
                   <i class="material-icons ml-1">person_add</i>
+                </button>
+
+                <button class="btn btn-outline-primary d-flex text-uppercase pr-3" id="contact-help-button" data-tooltip="true" data-placement="top"
+                  title="Mostrar ajuda">
+                  <i class="material-icons ml-1">help</i>
                 </button>
 
                 <button class="btn btn-outline-primary d-flex text-uppercase pr-3" id="contact-help-button" data-tooltip="true" data-placement="top"
@@ -182,59 +188,50 @@
               </div>
             </div>
             <div class="form-row">
-              <button class="btn btn-primary d-flex mr-2 text-uppercase" type="submit">Submit form
-                <i class="material-icons ml-1">done</i>
-              </button>
-              <button class="btn btn-danger d-flex mr-2 text-uppercase" type="reset" id="contact-new-close-button">LIMPAR
-                <i class="material-icons ml-1">delete</i>
-              </button>
-              <button class="btn btn-outline-secondary d-flex text-uppercase" type="button" id="contact-new-favorite-button">FAVORITO
-                <i class="material-icons ml-1">star_border</i>
-              </button>
+              <div class="d-flex col-12 flex-wrap justify-content-center justify-content-xl-start">
+                <button class="btn btn-primary d-flex mr-2 mt-2 text-uppercase" type="submit">Submit form
+                  <i class="material-icons ml-1">done</i>
+                </button>
+                <button class="btn btn-danger d-flex mr-2 mt-2 text-uppercase" type="reset" id="contact-new-close-button">LIMPAR
+                  <i class="material-icons ml-1">delete</i>
+                </button>
+                <button class="btn btn-outline-secondary d-flex mt-2 text-uppercase" type="button" id="contact-new-favorite-button">FAVORITO
+                  <i class="material-icons ml-1">star_border</i>
+                </button>
+              </div>
             </div>
           </form>
 
         </div>
         <!-- PAGINATION -->
-        <div class="row contacts-list-pagination align-items-center justify-content-between">
-          <!-- PAGE LIMIT -->
+        <div class="loading-content" id="contacts-loading-content">
+          <div class="row contacts-list-pagination align-items-center justify-content-between">
+            <!-- PAGE LIMIT -->
 
-          <div class="input-group col-3">
-            <div class="input-group-prepend">
-              <button class="btn btn-secondary disabled" type="button" >
-                Exibindo por página
-              </button>
-            </div>
-            <select class="custom-select text-align-center" id="contacts-page-limit-select" data-tooltip="true" data-placement="top" title="Limite por página">
-              <option value="10" selected>10</option>
-              <option value="20">20</option>
-              <option value="30">30</option>
-              <option value="40">40</option>
-              <option value="50">50</option>
-            </select>
-          </div>
-          <div class="col-9">
-            <ul class="pagination justify-content-end pt-3 ">
-              <li class="page-item ">
-                <a class="btn btn-outline-secondary font-weight-bold d-flex" href="#" style="border-radius: 0.25rem 0 0 0.25rem;">
-                  <i class="material-icons ">navigate_before</i>
-                </a>
-              </li>
-              <div class="d-flex" id="contacts-pagination-buttons">
-                 
+            <div class="input-group col-12 col-md-5 col-xl-3">
+              <div class="input-group-prepend">
+                <button class="btn btn-secondary disabled" type="button">
+                  Exibindo por página
+                </button>
               </div>
+              <select class="custom-select text-align-center" id="contacts-page-limit-select" data-tooltip="true" data-placement="top"
+                title="Limite por página">
+                <option value="10" selected>10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-7 col-xl-9">
+              <ul class="pagination justify-content-center justify-content-xl-end justify-content-md-end pt-3" id="contacts-pagination-buttons">
+              </ul>
+            </div>
 
-              <li class="page-item ">
-                <a class="btn btn-outline-secondary font-weight-bold d-flex" href="#" style="border-radius: 0 0.25rem 0.25rem 0;">
-                  <i class="material-icons ">navigate_next</i>
-                </a>
-              </li>
-            </ul>
           </div>
-
+          <!-- CONTACTS LIST -->
+          <div class="contacts-list row"></div>
         </div>
-        <!-- CONTACTS LIST -->
-        <div class="contacts-list row"></div>
         <!-- PAGE LOADER -->
         <div class="la-ball-clip-rotate la-primary la-2x mx-auto mt-5" id="page-loader" style="display: none">
           <div></div>
