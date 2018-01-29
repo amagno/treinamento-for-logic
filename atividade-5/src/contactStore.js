@@ -49,16 +49,16 @@ export const store = {
   },
   getContactsPages: () => {
     const clone = Array.from(store.getStore());
-    const pages = store.getPaginationInfo().pages;
+    // const pages = store.getPaginationInfo().pages;
     const limit = store.getPaginationInfo().limit;
     const data = [];
     for (let i = 0; i < clone.length; i += limit) {
       data.push(clone.slice(i, i + limit));
     }
-    console.log('DATA  ----> ', data);    
-    console.log('CLONE ----> ', clone); 
-    console.log('PAGES ----> ', pages);
-    console.log('LIMIT ----> ', limit);
+    // console.log('DATA  ----> ', data);    
+    // console.log('CLONE ----> ', clone); 
+    // console.log('PAGES ----> ', pages);
+    // console.log('LIMIT ----> ', limit);
     return data;
     
   },
@@ -81,12 +81,12 @@ export const fetchAllContacts = (url = urlApi, $ = jquery) => {
   store.dispatch('contacts-loading-show');  
   $.get(url)
     .done(response => {
-      console.log('FETCH DATA: ', response);
+      // console.log('FETCH DATA: ', response);
       const data = sanitizeContactsData(response);
       store.setPaginationInfo({}, data);
       store.setStore(data);
       store.dispatch('contacts-fetch');
-      setTimeout(() => store.dispatch('contacts-loading-hide'), 1000);      
+      setTimeout(() => store.dispatch('contacts-loading-hide'), 1000);   
     })
     .catch(error => console.error(error));
 };
@@ -118,11 +118,9 @@ export const updateContact = (contactAttributes, id, url = urlApi, $ = jquery) =
   console.log(contact);
   const update = store.getStore().map(c => c._id === id ? contact : c);
   const data = sanitizeContactsData(update);
-  // console.log(data);
   store.setPaginationInfo({}, data);
   store.setStore(data);
   store.dispatch('contacts-fetch');
-  
   $.ajax({
     method: 'PUT',
     url: `${url}/${id}`,
@@ -130,7 +128,6 @@ export const updateContact = (contactAttributes, id, url = urlApi, $ = jquery) =
   })
     .done((response) => {
       console.log(response);
-      console.log(id);
     })
     .catch(error => console.error(error));
 };
