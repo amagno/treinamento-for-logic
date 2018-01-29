@@ -71,24 +71,10 @@ export const isFavoriteContact = (isFavoriteButton) => {
 export const editContact = (editContactButton, form, buttonForm, favoriteFormButton, favoriteCheckbox) => {
   editContactButton.click(function(event) {
     event.preventDefault();
-    const button = editContactButton;
     const formHTMLElement = form[0];
     const id = this.dataset.target;    
-    const contact = store.findContactById(id);
-     
-    if (button.hasClass('active')) {
-      button.html('<i class="material-icons md-36">edit</i>');  
-      button.removeClass('active');
-      formHTMLElement.dataset.formType = 'update';
-      formHTMLElement.dataset.updateId = id;
-      closeForm(buttonForm, form);
-      formReset(form);
-      return;
-    }
-    console.log('edit: ', id);
-    // implement store
-    button.html('<i class="material-icons md-36">cancel</i>');
-    button.addClass('active');    
+    const contact = store.findContactById(id);     
+    // console.log('edit: ', id);
     setContactInputValues(contact, form, favoriteFormButton, favoriteCheckbox);
     formHTMLElement.dataset.formType = 'update';
     formHTMLElement.dataset.updateId = id;
