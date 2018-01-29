@@ -8,7 +8,7 @@
     "dev:api": "(cd api && yarn start)",
     "dev:client": "webpack-dev-server --inline --hot --open",
     "build": "webpack -p",
-    "postinstall": "git clone https://github.com/amagno/simple-api.git api"
+    "start": "node pageServer.js"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.38",
@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "bootstrap": "^4.0.0",
+    "express": "^4.16.2",
     "jquery": "^3.3.1",
     "lodash": "^4.17.4",
     "popper.js": "^1.12.9"
