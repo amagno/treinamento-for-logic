@@ -1,6 +1,24 @@
+
+export const favoriteOnlyFilter = (contacts) => {
+  const clone = contacts.slice(0);
+  return clone.filter(c => c.isFavorite === true);
+};
+export const getContactsPages = (contacts, limit) => {
+  const clone = contacts.slice(0);
+  const data = [];
+  for (let i = 0; i < clone.length; i += limit) {
+    data.push(clone.slice(i, i + limit));
+  }
+  return data;
+};
 export const filterContacts = (key, data = []) => {
   return data.sort((a, b) => {
-    return a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0;
+    if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+      return 0;
+    }
+    const vA = (typeof a[key] === 'string') ? a[key].toUpperCase() : a[key];
+    const vB = (typeof b[key] === 'string') ? b[key].toUpperCase() : b[key];
+    return vA > vB ? 1 : vA < vB ? -1 : 0;
   });
 };
 export const numberOfPages = (total, limit) => {

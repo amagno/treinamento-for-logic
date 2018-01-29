@@ -2,7 +2,7 @@ const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const webpack = require('webpack');
 
-module.exports = {
+const config = {
   entry: ['jquery', './src/main.js'],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -25,7 +25,10 @@ module.exports = {
           fallback: '',
           use: [
             {
-              loader: 'css-loader', // translates CSS into CommonJS modules
+              loader: 'css-loader',
+              options: {
+                minimize: process.env.NODE_ENV === 'production'
+              } // translates CSS into CommonJS modules
             }, 
             {
               loader: 'postcss-loader', // Run post css actions
@@ -67,3 +70,14 @@ module.exports = {
     // ...
   }
 };
+
+if (process.env.NODE_ENV === 'production') {
+  config.plugins.push(
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      comments: false,
+    })
+  );
+}
+
+module.exports = config;

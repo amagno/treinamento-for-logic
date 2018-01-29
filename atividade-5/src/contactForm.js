@@ -7,7 +7,7 @@ import {
   favoriteUnchecked, 
   makeDataForPost 
 } from './contactFormFunctions';
-import { createContact, updateContact, store } from './contactStore';
+import { actions, store } from './data';
 import { modalContactUpdate } from './contactModal';
 
 const urlApi = 'http://localhost:3000/v1/contacts';
@@ -15,6 +15,7 @@ const $form = $('#contact-new-form');
 const $buttonForm = $('#contact-new-button');
 const $favoriteFormButton = $('#contact-new-favorite-button');
 const $favoriteCheckbox = $('#contact-new-favorite-checkbox');
+const { createContact, updateContact } = actions;
 
 export const formOptionsDefault = {
   form: $form,

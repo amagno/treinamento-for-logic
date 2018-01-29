@@ -1,6 +1,7 @@
 import $ from 'jquery';
-import { handleFilterChange, handleSearch, fetchAllContacts, favoriteOnly, store } from './contactStore';
+import { actions, store } from './data';
 import { createCsvBlob, downloadBlob } from './utils';
+
 export const searchFormDefaultOptions = {
   buttonSearchField: $('.dropdown-toggle.search'),
   dropdownSearchField: $('.dropdown-item.search'),
@@ -12,6 +13,7 @@ export const searchFormDefaultOptions = {
   helpButton: $('#contact-help-button'),
   tooltipSelector: $('[data-tooltip="true"]')
 };
+const { handleFilterChange, handleSearch, fetchAllContacts, favoriteOnly } = actions;
 // Init search contacts form
 export const initSearchForm = (options = searchFormDefaultOptions) => {
   let time;

@@ -1,12 +1,14 @@
 import jquery from 'jquery';
-import { openForm, closeForm, formReset, setContactInputValues } from './contactFormFunctions';
+import { openForm, setContactInputValues } from './contactFormFunctions';
 import { makeContactsHtml } from './contactHTML';
 import { modalContactDelete } from './contactModal';
 import { formOptionsDefault } from './contactForm';
-import { store, deleteContact, updateContact } from './contactStore';
+import { actions, store } from './data';
+
 
 const urlApi = 'http://localhost:3000/v1/contacts';;
 const $contactsListContainer = $('.contacts-list');
+const { deleteContact, updateContact } = actions;
 
 export const contactListOptionsDefault = {
   contactsListContainer: $contactsListContainer,
@@ -62,9 +64,24 @@ export const isFavoriteContact = (isFavoriteButton) => {
   isFavoriteButton.click(function(event) {
     event.preventDefault();
     const id = this.dataset.target;
+    // const bt = this;
     const contact = store.findContactById(id);
-    if (!contact) throw new Error(`Contact is not found on isFavorite update`);
     const isFavorite = !contact.isFavorite;
+    // const favoriteOnly = store.getIsFavorite();
+    if (!contact) throw new Error(`Contact is not found on isFavorite update`);
+  
+    // if (isFavorite) {
+    //   $(bt).addClass('btn-primary active');
+    //   $(bt).removeClass('btn-outline-primary');
+    //   $(bt).children('i.material-icons').html('star');
+    // } else {
+    //   $(bt).addClass('btn-outline-primary');
+    //   $(bt).removeClass('btn-primary active');
+    //   $(bt).children('i.material-icons').html('star_border');      
+    // }
+    // if (favoriteOnly) {
+    //   $(`#contact-${id}`).remove();
+    // }
     updateContact({ isFavorite }, id);
   });
 };

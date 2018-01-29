@@ -1,5 +1,8 @@
 import jquery from 'jquery';
-import { handlePageChange } from './contactStore';
+import { actions } from './data';
+
+const { handlePageChange } = actions;
+
 const paginationButton = (page, active = false) => `
 <li class="page-item">
 <a class="btn btn-outline-secondary contacts-pagination rounded-0 font-weight-bold ${active ? 'active' : ''}" href="#" data-page="${page}">${page}</a>
@@ -60,7 +63,6 @@ export default (pages, active, container, show = 5, $ = jquery) => {
   $('.contacts-pagination').click(event => {
     event.preventDefault();
     const page = parseInt(event.target.dataset.page);
-    console.log(page);
     handlePageChange(page);
   });
   $('.contacts-pagination-first').click(event => {
