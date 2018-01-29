@@ -7,8 +7,10 @@
     "dev": "run-p dev:*",
     "dev:api": "(cd api && yarn start)",
     "dev:client": "webpack-dev-server --inline --hot --open",
-    "build": "webpack -p",
-    "start": "node pageServer.js"
+    "build": "webpack --env.NODE_ENV=production",
+    "run:api": "(cd api && yarn start)",
+    "run:client": "node serve.js",
+    "start": "run-p run:*"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.38",
@@ -26,6 +28,7 @@
     "precss": "^3.0.0",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.1",
+    "uglifyjs-webpack-plugin": "^1.1.8",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.11.1"
   },
@@ -33,7 +36,6 @@
     "bootstrap": "^4.0.0",
     "express": "^4.16.2",
     "jquery": "^3.3.1",
-    "lodash": "^4.17.4",
     "popper.js": "^1.12.9"
   }
 }

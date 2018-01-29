@@ -1,11 +1,12 @@
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const webpack = require('webpack');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const config = {
   entry: ['jquery', './src/main.js'],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'public', 'dist'),
     publicPath: '/dist/',
     filename: 'main.build.js'
   },
@@ -27,7 +28,7 @@ const config = {
             {
               loader: 'css-loader',
               options: {
-                minimize: process.env.NODE_ENV === 'production'
+                minimize: true
               } // translates CSS into CommonJS modules
             }, 
             {
@@ -61,23 +62,30 @@ const config = {
     })
   ],
   devServer: {
-    proxy: { // proxy URLs to backend development server
-      '/api': 'http://localhost:3000'
-    },
-    contentBase: path.join(__dirname, 'src'), // boolean | string | array, static file location
+    contentBase: path.join(__dirname, 'public'), // boolean | string | array, static file location
     watchContentBase: true
     // compress: true, // enable gzip compression
     // ...
   }
 };
 
-if (process.env.NODE_ENV === 'production') {
-  config.plugins.push(
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      comments: false,
-    })
-  );
-}
 
-module.exports = config;
+module.exports = env => {
+  console.log(env.NODE_ENV);  
+  if (env.NODE_ENV === 'production') {
+    config.plugins.push(
+      new UglifyJsPlugin({
+        sourceMap: true,
+        uglifyOptions: {
+          output: {
+            preamble: false
+          },
+          compress: {
+            drop_console: true
+          }
+        }
+      })
+    );
+  }
+  return config;
+};
