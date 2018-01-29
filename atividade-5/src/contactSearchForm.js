@@ -1,34 +1,45 @@
 import $ from 'jquery';
 import { handleFilterChange, handleSearch, fetchAllContacts, favoriteOnly, store } from './contactStore';
-
+import { createCsvBlob, downloadBlob } from './utils';
 export const searchFormDefaultOptions = {
   buttonSearchField: $('.dropdown-toggle.search'),
   dropdownSearchField: $('.dropdown-item.search'),
   selectFilterOrder: $('#contacts-filter-order'),
   contactSearchInput: $('#contact-search-input'),
   contactSearchInputButton: $('#contact-search-input-button'),
-  contactFavoriteOnlyButton: $('#contact-favorite-only-button')
+  contactFavoriteOnlyButton: $('#contact-favorite-only-button'),
+  exportContactsButton: $('#contact-export-button'),
+  helpButton: $('#contact-help-button'),
+  tooltipSelector: $('[data-tooltip="true"]')
 };
 // Init search contacts form
 export const initSearchForm = (options = searchFormDefaultOptions) => {
   let time;
   let fieldSearch = 'firstName';
+  options.tooltipSelector.tooltip('dispose');
+  options.helpButton.click(event => {
+    event.preventDefault();
+    if (options.helpButton.hasClass('active')) {
+      options.tooltipSelector.tooltip('dispose');
+      options.helpButton.removeClass('active');
+      return;
+    }
+    options.tooltipSelector.tooltip('show');
+    setTimeout(() => options.tooltipSelector.tooltip('hide'), 3000);
+    options.helpButton.addClass('active');
+  });
+  options.exportContactsButton.click(event => {
+    event.preventDefault();
+    const csv = createCsvBlob(store.getStore());
+    downloadBlob(csv);
+  });
   // contact favorite only toggle
   options.contactFavoriteOnlyButton.click(event => {
     event.preventDefault();
     if (options.contactFavoriteOnlyButton.hasClass('active')) {
       options.contactFavoriteOnlyButton.removeClass('active');
-      // fetchAllContacts();
       favoriteOnly(false);
       return;
-      // if (options.contactSearchInput.val()) {
-      //   favoriteOnly(false);        
-      //   handleSearch(fieldSearch, options.contactSearchInput.val());
-      //   return;
-      // }
-      // favoriteOnly(false);      
-      // fetchAllContacts();
-      // return;
     }
     options.contactFavoriteOnlyButton.addClass('active');
     favoriteOnly(true);
@@ -57,8 +68,6 @@ export const initSearchForm = (options = searchFormDefaultOptions) => {
       fetchAllContacts();
     }
     options.contactSearchInput.val('').focus();
-    // store.dispatch('contacts-fetch');
-    // console.log(value);
   });
   // handle focus on button search click
   options.contactSearchInputButton.click(event => {

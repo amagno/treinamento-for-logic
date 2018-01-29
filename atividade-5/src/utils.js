@@ -36,7 +36,7 @@ export const createCsvBlob = (contacts = [], separator = ',') => {
   });
   return new Blob([csv], { type: 'text/csv;charset=utf-8' });
 };
-export const doonwloadBlob = (blob, filename = 'contacts.csv') => {
+export const downloadBlob = (blob, filename = 'contacts.csv') => {
   const csvURL = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = csvURL;

@@ -14,13 +14,6 @@ import 'bootstrap';
 // window.Util = Util;
 
 $(document).ready(() => {
-  // initStore();
-
-  // Bootstrap tooltip
-  $('[data-tooltip="true"]').tooltip();
-
-
-
   // EVENTS
   window.addEventListener('contacts-fetch', event => {
     event.preventDefault();
@@ -35,7 +28,7 @@ $(document).ready(() => {
     
 
     // console.log('number of pages ', pages);
-    makePaginationButtons(pages, page);
+    makePaginationButtons(pages, page).fadeIn(300);
     // // console.log('PAGINATION INFO: ', store.getPaginationInfo());
     makeContactsList(contacts[page - 1]);
   });
@@ -54,7 +47,7 @@ $(document).ready(() => {
     const pageLoader = $('#page-loader');
     const container = contactListOptionsDefault.contactsListContainer;
     pageLoader.hide();
-    container.fadeIn(500);
+    container.fadeIn(300);
   });
   initFormSubmit();
   initSearchForm();  

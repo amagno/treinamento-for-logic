@@ -2,7 +2,7 @@ import jquery from 'jquery';
 import { sanitizeContactsData, numberOfPages, filterContacts } from './utils';
 
 const urlApi = 'http://localhost:3000/v1/contacts';
-const loadingDelay = 1000;
+const loadingDelay = 600;
 
 export const store = {
   getIsFavorite: () => {
@@ -40,11 +40,11 @@ export const store = {
     const store = window.__CONTACTS__STORE__;
     const filter = window.__CONTACTS__STORE__FILTER__;
     const isFavorite = window.__CONTACTS__STORE__IS_FAVORITE__;
-    const clone = Object.assign([], store);
+    const filtered = filterContacts(filter, store);
     if(isFavorite) { 
-      return filterContacts(filter, clone.filter(c => c.isFavorite === true));
+      return filtered.filter(c => c.isFavorite === true);
     };
-    return filterContacts(filter, store);
+    return filtered;
     // return window.__CONTACTS__STORE__;
   },
   getContactsPages: () => {
@@ -81,11 +81,12 @@ export const fetchAllContacts = (url = urlApi, $ = jquery) => {
   store.dispatch('contacts-loading-show');  
   $.get(url)
     .done(response => {
+      console.log('FETCH DATA: ', response);
       const data = sanitizeContactsData(response);
       store.setPaginationInfo({}, data);
       store.setStore(data);
       store.dispatch('contacts-fetch');
-      setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);      
+      setTimeout(() => store.dispatch('contacts-loading-hide'), 1000);      
     })
     .catch(error => console.error(error));
 };
@@ -106,8 +107,8 @@ export const createContact = (contact, url = urlApi, $ = jquery) => {
     })
     .catch(error => console.log(error));
 };
-// go finish implement
-export const updateContact = (contactAttributes, id) => {
+// Update contact
+export const updateContact = (contactAttributes, id, url = urlApi, $ = jquery) => {
   const storeContact = store.findContactById(id);
   if (!storeContact) throw new Error(`contact: ${id} not found on store`);
   const contact = {
@@ -115,19 +116,28 @@ export const updateContact = (contactAttributes, id) => {
     ...contactAttributes,  
   };
   console.log(contact);
-  const data = sanitizeContactsData([
-    ...store.removeContactById(id),
-    contact
-  ]);
-  console.log(data);
-
+  const update = store.getStore().map(c => c._id === id ? contact : c);
+  const data = sanitizeContactsData(update);
+  // console.log(data);
+  store.setPaginationInfo({}, data);
   store.setStore(data);
   store.dispatch('contacts-fetch');
+  
+  $.ajax({
+    method: 'PUT',
+    url: `${url}/${id}`,
+    data: contact
+  })
+    .done((response) => {
+      console.log(response);
+      console.log(id);
+    })
+    .catch(error => console.error(error));
 };
 // Delete contacts
 export const deleteContact = (id, url = urlApi, $ = jquery) => {
   if (!id) throw new Error('_id is not defined for delete!');
-    store.dispatch('contacts-loading-show');    
+    // store.dispatch('contacts-loading-show'); 
     $.ajax({
       method: 'DELETE',
       url: `${url}/${id}`
@@ -138,7 +148,7 @@ export const deleteContact = (id, url = urlApi, $ = jquery) => {
         store.setPaginationInfo({}, data);
         store.setStore(data);
         store.dispatch('contacts-fetch');
-        setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);
+        // setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);
       })
       .catch(error => console.log(error));
 };
@@ -170,10 +180,6 @@ export const handleSearch = (field, value, url = urlApi, $ = jquery) => {
 // Favorite only contacts
 export const favoriteOnly = (state) => {
   store.dispatch('contacts-loading-show');
-  // const data = store.getStore().filter(contact => contact.isFavorite === true);
-  // store.setStore(data);
-  // store.setPaginationInfo({}, data);
-  // const isFavorite = store.getIsFavorite();
   store.setIsFavorite(state);
   store.setPaginationInfo({});
   store.dispatch('contacts-fetch');
@@ -189,9 +195,7 @@ export const handlePageLimitChange = (limit) => {
 };
 // Page change
 export const handlePageChange = (page) => {
-  store.dispatch('contacts-loading-show');  
   store.setPaginationInfo({ page });
   console.log('Change page info: ', store.getPaginationInfo());  
   store.dispatch('contacts-fetch');
-  setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);  
 };
