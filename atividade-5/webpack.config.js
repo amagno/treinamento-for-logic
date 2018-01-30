@@ -68,10 +68,7 @@ const config = {
     // ...
   }
 };
-
-
 module.exports = env => {
-  console.log(env.NODE_ENV);  
   if (env.NODE_ENV === 'production') {
     config.plugins.push(
       new UglifyJsPlugin({

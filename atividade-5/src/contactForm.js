@@ -38,6 +38,7 @@ export const initFormToggles = (form, buttonForm, favoriteFormButton, favoriteCh
       formHTMLElement.dataset.formType = '';
       formReset(form);
       closeForm(buttonForm, form);
+      favoriteUnchecked(favoriteFormButton, favoriteCheckbox);      
       return;
     }
     formHTMLElement.dataset.formType = 'new';

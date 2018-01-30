@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "run-p dev:*",
     "dev:api": "(cd api && yarn start)",
-    "dev:client": "webpack-dev-server --inline --hot --open",
+    "dev:client": "webpack-dev-server --inline --hot --open --env.NODE_ENV=develop",
     "build": "webpack --env.NODE_ENV=production",
     "run:api": "(cd api && yarn start)",
     "run:client": "node serve.js",
