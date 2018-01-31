@@ -1,6 +1,6 @@
 import { numberOfPages, favoriteOnlyFilter, filterContacts } from '../utils';
 
-const useLocalStorage = true;
+const useLocalStorage = false;
 
 const store = {
   getIsFavorite: () => {
@@ -25,7 +25,7 @@ const store = {
     const pages = data.pages || numberOfPages(total, limit);
     const page = data.page || paginationInfo.page;
     const obj = {
-      page: page > pages ? pages : page,
+      page: page > pages ? pages : page < 1 ? 1 : page,
       pages,
       limit,
       total

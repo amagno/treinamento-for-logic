@@ -83,7 +83,6 @@ export const handleFilterChange = (filter) => {
 };
 // Handle search input
 export const handleSearch = (field, value, url = urlApi, $ = jquery) => {
-  store.dispatch('contacts-loading-show');  
   const sU = `${url}?${field}=${value}`;
   $.get(sU)
     .done(response => {
@@ -99,7 +98,7 @@ export const handleSearch = (field, value, url = urlApi, $ = jquery) => {
 export const favoriteOnly = (state) => {
   store.dispatch('contacts-loading-show');
   store.setIsFavorite(state);
-  store.setPaginationInfo({}, store.getStore());
+  store.setPaginationInfo({});
   store.dispatch('contacts-fetch');
   setTimeout(() => store.dispatch('contacts-loading-hide'), loadingDelay);
 };
